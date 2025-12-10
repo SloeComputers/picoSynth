@@ -3,10 +3,6 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_subdirectory(SIG)
-add_subdirectory(inst)
+add_library(Simple INTERFACE)
 
-add_picoX7_executable(dinkySynth
-                         dinkySynth.cpp
-                      LIBRARIES
-                         Juno106 SIG)
+target_include_directories(Simple INTERFACE ..)

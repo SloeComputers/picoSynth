@@ -7,18 +7,20 @@
 
 #include <cstring>
 
-#include "../SynthBase.h"
+#include "../SynthSysExBase.h"
 #include "Juno106/Program.h"
 #include "Juno106/Voice.h"
-#include "Juno106/Traits.h"
 #include "Juno106/SysEx.h"
 
 namespace Juno106 {
 
-class Synth : public ::SynthBase<Traits,Voice>
+class Synth : public ::SynthSysExBase<Voice, /* NUM_VOICES */ 6, /* MAX_SYSEX_SIZE */ 3 + 18>
 {
 public:
-   Synth() = default;
+   Synth()
+      : SynthSysExBase(MIDI_MANUF_ID)
+   {
+   }
 
    const char* getName() const override { return "    JUNO-106    "; }
 
@@ -28,6 +30,8 @@ public:
    }
 
 private:
+   static const uint8_t MIDI_MANUF_ID = 0x41; //!< Roland
+
    void setPatch(const uint8_t* raw_, const char* name_)
    {
       memcpy((uint8_t*)&patch, raw_, sizeof(SysEx));
@@ -98,7 +102,7 @@ private:
          break;
 
       default:
-         voice[index_].on(midi_note_, velocity_);
+         voice[index_].noteOn(midi_note_, velocity_);
          return;
       }
 

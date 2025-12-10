@@ -10,10 +10,12 @@
 #include "SIG/TriOsc.h"
 #include "SIG/RampOsc.h"
 #include "SIG/PulseOsc.h"
+#include "SIG/SineOsc.h"
 #include "SIG/Noise.h"
 #include "SIG/LfoEnv.h"
 #include "SIG/Adsr.h"
 #include "SIG/Gain.h"
+#include "SIG/BiQuadFilter.h"
 
 #include "Table_amp7.h"
 #include "Table_gain7.h"
@@ -63,6 +65,9 @@ public:
       dco_sub.gain = table_amp7[patch_->sub_osc_level];
       noise.gain   = table_amp7[patch_->noise_level];
 
+      vcf.setFreq(scaleMidi(patch_->vcf_freq, 10.0, 20000.0));
+      vcf.setQ(scaleMidi(patch_->vcf_res, 0.1, 4.0));
+
       env.setAttack_mS(1 + patch_->env_attack * 3000 / 127);
       env.setDecay_mS(1 + patch_->env_decay * 12000 / 127);
       env.setSustain(patch_->env_sustain);
@@ -78,8 +83,7 @@ public:
       gate = 0;
    }
 
-   //! Note on
-   void on(uint8_t note_, uint8_t velocity_)
+   void noteOn(uint8_t note_, uint8_t velocity_)
    {
       note = note_;
 
@@ -96,15 +100,13 @@ public:
       gate = 1.0;
    }
 
-   //! Note off
-   void off(uint8_t velocity_)
+   void noteOff(uint8_t velocity_)
    {
       env.off();
 
       gate = 0.0;
    }
 
-   //! Get next sample
    Sample sample()
    {
       Sample lfo_out = lfo() * lfo_env();
@@ -120,19 +122,12 @@ public:
 
       Sample env_out = env();
 
-      return vca(dco_out * (vca_gate ? gate : env_out));
+      return vca(vcf(dco_out) * (vca_gate ? gate : env_out));
    }
 
-   static Sample sample(Voice* voice_, unsigned n_)
+   static Sample effect(Sample sample_)
    {
-      Sample sample = 0.0;
-
-      for(unsigned i = 0; i < n_; ++i)
-      {
-         sample += voice_[i].sample();
-      }
-
-      return sample / n_;
+      return sample_;
    }
 
 private:
@@ -156,21 +151,22 @@ private:
    static constexpr float LFO_DELAY_MAX  = 3;    //!< LFO DELAY 10 => 3s
    static constexpr float LFO_ENV_ATTACK = 0.2;  //!< LFO envelope attack time 0.2s
 
-   signed   transpose{0};
-   uint8_t  note{};
-   TriOsc   lfo{};
-   LfoEnv   lfo_env{};
-   Sample   dco_lfo{};
-   Sample   dco_pwm_lfo_gain{};
-   bool     dco_pwm_lfo{};
-   RampOsc  dco_saw{};
-   PulseOsc dco_pwm{};
-   PulseOsc dco_sub{};
-   Noise    noise{};
-   Adsr     env{};
-   Gain     vca{};
-   bool     vca_gate{};
-   Sample   gate{};
+   signed         transpose{0};
+   uint8_t        note{};
+   TriOsc         lfo{};
+   LfoEnv         lfo_env{};
+   Sample         dco_lfo{};
+   Sample         dco_pwm_lfo_gain{};
+   bool           dco_pwm_lfo{};
+   RampOsc        dco_saw{};
+   PulseOsc       dco_pwm{};
+   PulseOsc       dco_sub{};
+   Noise          noise{};
+   Adsr           env{};
+   Filter::BiQuad vcf{Filter::LOPASS};
+   Gain           vca{};
+   bool           vca_gate{};
+   Sample         gate{};
 };
 
 } // namespace Juno106

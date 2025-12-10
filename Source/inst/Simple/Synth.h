@@ -2,22 +2,20 @@
 // Copyright (c) 2025 John D. Haughton
 // SPDX-License-Identifier: MIT
 //-------------------------------------------------------------------------------
-   
+
 #pragma once
 
-#include "Sample.h"
+#include "../SynthBase.h"
+#include "Simple/Voice.h"
 
-class Gain
+namespace Simple {
+
+class Synth : public ::SynthBase<Voice, /* NUM_VOICES */ 16>
 {
 public:
-   Gain() = default;
+   Synth() = default;
 
-   operator Sample() const { return value; }
-
-   Sample operator=(Sample value_) { return value = value_; }
-
-   Sample operator()(Sample in_) { return in_ * value; }
-
-private:
-   Sample value{1.0};
+   const char* getName() const override { return "     simple     "; }
 };
+
+} // namespace Simple
