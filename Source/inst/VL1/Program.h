@@ -11,10 +11,6 @@ namespace VL1 {
 
 struct Program
 {
-   uint8_t volume{0x7f};  //<! The overall output level
-   uint8_t balance{0x40}; //<! Balance between rhythm and melody
-   uint8_t octave{0x1};   //<! The octave
-
    uint8_t wave{0};
    uint8_t attack_time{0};
    uint8_t decay_time{0};
@@ -22,7 +18,7 @@ struct Program
    uint8_t sustain_time{0};
    uint8_t release_time{0};
    uint8_t vibrato{0};
-   uint8_t tremlo{0};
+   uint8_t tremolo{0};
 
    const char* name{""};
 

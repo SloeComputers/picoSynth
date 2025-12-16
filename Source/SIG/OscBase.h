@@ -30,7 +30,7 @@ public:
    {
       float ratio = freq_hz_ / SAMPLE_RATE;
 
-      delta = sample2phase(ratio);
+      delta = sample2phase(ratio * 2.0);
    }
 
    //! Set frequency for MIDI note value

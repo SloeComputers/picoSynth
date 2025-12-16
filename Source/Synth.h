@@ -27,6 +27,8 @@ public:
       {
          voiceOff(i, 0);
       }
+
+      voiceProgram(0, 0);
    }
 
    //! Get stereo samples from synth
@@ -63,6 +65,25 @@ protected:
 
       text[line_][i]     = '\0';
       text_update[line_] = true;
+   }
+
+   signed editInt(const char* name_, uint8_t midi_value_, signed min_, signed max_)
+   {
+      signed value = min_ + midi_value_ * (max_ - min_) / 127;
+
+      char text[17];
+      if (min_ < 0)
+      {
+         char sign = value < 0 ? '-' : value > 0 ? '+' : ' ';
+         snprintf(text, sizeof(text), "%s %c%d", name_, sign, abs(value));
+      }
+      else
+      {
+         snprintf(text, sizeof(text), "%s %d", name_, value);
+      }
+      setText(1, text);
+
+      return value;
    }
 
 private:

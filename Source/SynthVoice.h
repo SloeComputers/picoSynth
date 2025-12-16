@@ -26,6 +26,15 @@ protected:
       }
    }
 
+   template <typename CONTROL>
+   void controlVoices(const CONTROL* control_)
+   {
+      for(unsigned i = 0; i < NUM_VOICES; ++i)
+      {
+         voice[i].control(control_);
+      }
+   }
+
    VOICE voice[NUM_VOICES];
 
 private:
@@ -53,9 +62,17 @@ private:
       }
    }
 
+   virtual bool filterNote(uint8_t midi_note_)
+   {
+      return false;
+   }
+
    void voiceOn(unsigned index_, uint8_t midi_note_, uint8_t velocity_) override
    {
-      voice[index_].noteOn(midi_note_, velocity_);
+      if (not filterNote(midi_note_))
+      {
+         voice[index_].noteOn(midi_note_, velocity_);
+      }
    }
 
    void voiceOff(unsigned index_, uint8_t velocity_) override

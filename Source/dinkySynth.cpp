@@ -14,8 +14,8 @@
 #include "SIG/Sample.h"
 
 #include "Juno106/Synth.h"
-#include "Simple/Synth.h"
 #include "VL1/Synth.h"
+#include "Simple/Synth.h"
 
 
 static const unsigned DAC_FREQ         = SAMPLE_RATE;
@@ -27,8 +27,8 @@ static const unsigned NUM_SYNTHS       = 3;
 
 
 static Juno106::Synth juno106{};
-static Simple::Synth  simple{};
 static VL1::Synth     vl1{};
+static Simple::Synth  simple{};
 static Synth*         synth{};
 static unsigned       synth_index{0};
 
@@ -116,8 +116,8 @@ void initSynth()
    switch(synth_index)
    {
    case 0: synth = &juno106; break;
-   case 1: synth = &simple;  break;
-   case 2: synth = &vl1;     break;
+   case 1: synth = &vl1;     break;
+   case 2: synth = &simple;  break;
    }
 
    usb.attachInstrument(1, *synth);

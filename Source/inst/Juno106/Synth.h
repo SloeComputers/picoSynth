@@ -26,7 +26,6 @@ private:
    void synthInit() override
    {
       setText(0, "    JUNO-106    ");
-      setPatch(program[0].raw, "INIT");
    }
 
    static const uint8_t MIDI_MANUF_ID = 0x41; //!< Roland
@@ -73,7 +72,7 @@ private:
    }
 
    //! Override to intercept bottom notes as buttons
-   void voiceOn(unsigned index_, uint8_t midi_note_, uint8_t velocity_) override
+   bool filterNote(uint8_t midi_note_) override
    {
       // Notes below map neatly to AKAI MIDImix mute and rec/arm button
       switch(midi_note_)
@@ -101,11 +100,11 @@ private:
          break;
 
       default:
-         voice[index_].noteOn(midi_note_, velocity_);
-         return;
+         return false;
       }
 
       programVoices(&patch);
+      return true;
    }
 
    void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
@@ -151,7 +150,7 @@ private:
       if (index_ != 0)
          return;
 
-      const Program& prog = program[num_ + 1];
+      const Program& prog = program[num_];
       setPatch(prog.raw, prog.name);
    }
 

@@ -32,8 +32,8 @@ public:
 
    void setAttack_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
-      phase_rate[ATTACK] = MAX / samples;
+      phase_samples[ATTACK] = (time_ms_ * SAMPLE_RATE / 1000) + 1;
+      phase_rate[ATTACK]    = MAX / phase_samples[ATTACK];
 
       if (phase == ATTACK)
       {
@@ -43,9 +43,8 @@ public:
 
    void setDecay_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
-      int32_t rate = MAX / samples;
-      phase_rate[DECAY] = -rate;
+      phase_samples[DECAY] = (time_ms_ * SAMPLE_RATE / 1000) + 1;
+      phase_rate[DECAY]    = -int32_t(MAX / phase_samples[DECAY]);
 
       if (phase == DECAY)
       {
@@ -67,11 +66,16 @@ public:
       }
    }
 
+   void setSustain_mS(unsigned time_ms_)
+   {
+      phase_samples[SUSTAIN] = time_ms_ * SAMPLE_RATE / 1000;
+      phase_rate[SUSTAIN]    = 0;
+   }
+
    void setRelease_mS(unsigned time_ms_)
    {
-      unsigned samples = (time_ms_ * SAMPLE_RATE / 1000) + 1;
-      int32_t rate = MAX / samples;
-      phase_rate[RELEASE] = -rate;
+      phase_samples[RELEASE] = (time_ms_ * SAMPLE_RATE / 1000) + 1;
+      phase_rate[RELEASE]    = -int32_t(MAX / phase_samples[RELEASE]);
 
       if (phase == RELEASE)
       {
@@ -92,14 +96,14 @@ public:
    {
       level += rate;
 
-      if (rate > 0)
+      if (rate <= 0)
       {
-         if (level < target)
+         if (level >= target)
             return table_amp15[level >> 8];
       }
       else
       {
-         if (level >= target)
+         if (level < target)
             return table_amp15[level >> 8];
       }
 
@@ -125,15 +129,18 @@ private:
          phase_ = OFF;
       }
 
-      phase  = phase_;
-      rate   = phase_rate[phase];
-      target = phase_level[phase];
+      phase   = phase_;
+      rate    = phase_rate[phase];
+      target  = phase_level[phase];
+      samples = phase_samples[phase];
    }
 
    EnvPhase phase{OFF};
    int32_t  level{0};
    int32_t  rate{0};
    int32_t  target{0};
+   int32_t  samples{0};
    int32_t  phase_rate[NUM_PHASES]  = {};
    int32_t  phase_level[NUM_PHASES] = {};
+   int32_t  phase_samples[NUM_PHASES] = {};
 };
