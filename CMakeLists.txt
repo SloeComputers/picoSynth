@@ -5,7 +5,7 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-project(picoX7
+project(picoSynth
         LANGUAGES CXX C ASM
         VERSION 0.0)
 

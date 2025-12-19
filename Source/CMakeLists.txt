@@ -6,7 +6,7 @@
 add_subdirectory(SIG)
 add_subdirectory(inst)
 
-add_picoX7_executable(dinkySynth
-                         dinkySynth.cpp
+add_picoX7_executable(picoSynth
+                         picoSynth.cpp
                       LIBRARIES
                          Juno106 Simple VL1 SIG)

@@ -18,6 +18,8 @@ public:
 
    void init()
    {
+      setNumber(188);
+
       setText(0, "");
       setText(1, "");
 
@@ -45,6 +47,17 @@ public:
       return &text[line_][0];
    }
 
+   //! Get display number if it has been updated
+   bool getNumber(unsigned& number_)
+   {
+      if (not number_update)
+         return false;
+
+      number_       = number;
+      number_update = false;
+      return true;
+   }
+
 protected:
    virtual void synthInit()
    {
@@ -65,6 +78,12 @@ protected:
 
       text[line_][i]     = '\0';
       text_update[line_] = true;
+   }
+
+   void setNumber(unsigned number_)
+   {
+      number = number_;
+      number_update = true;
    }
 
    signed editInt(const char* name_, uint8_t midi_value_, signed min_, signed max_)
@@ -92,4 +111,7 @@ private:
 
    char text[MAX_TEXT_LINES][MAX_TEXT_LEN + 1];
    bool text_update[MAX_TEXT_LINES] = {};
+
+   unsigned number{0};
+   unsigned number_update{false};
 };

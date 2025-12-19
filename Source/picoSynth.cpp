@@ -38,6 +38,7 @@ static unsigned       synth_index{0};
 static hw::Profiler<PROFILE> profiler_core0{};
 static hw::Profiler<PROFILE> profiler_core1{};
 static hw::PhysMidi          phys_midi{};
+static hw::Led7Seg           led_7seg;
 static hw::Lcd               lcd{};            //!< 16x2 LCD
 static hw::Led               led{};
 static hw::Buttons           buttons{/* irq */ false};
@@ -47,10 +48,10 @@ extern "C" void IRQ_IO_BANK0() { buttons.irq(); }
 
 // --- USB MIDI and FILE -------------------------------------------------------
 
-static hw::FilePortal file_portal{"dinkySynth",
-                                  "https://github.com/AnotherJohnH/dinkySynth"};
+static hw::FilePortal file_portal{"picoSynth-1",
+                                  "https://github.com/AnotherJohnH/picoSynth"};
 
-static hw::UsbFileMidi usb{0xD157, "dinkySynth", file_portal};
+static hw::UsbFileMidi usb{0xD157, "picoSynth-1", file_portal};
 
 extern "C" void IRQ_USBCTRL() { usb.irq(); }
 
@@ -137,10 +138,10 @@ int main()
    printf("\033[2J\033[H");
 
    printf("\n");
-   puts(file_portal.addREADME("dinkySynth"));
+   puts(file_portal.addREADME("picoSynth-1"));
    printf("\n");
 
-   lcd.print(">> dinkySynth <<");
+   lcd.print(">>    pS-1    <<");
 
    usleep(1000000);
 
@@ -168,6 +169,12 @@ int main()
                lcd.print(text);
             }
          }
+      }
+
+      unsigned number{};
+      if (synth->getNumber(number))
+      {
+         led_7seg.printDec(number, number >= 100 ? 0 : 3);
       }
 
       bool     down{};

@@ -1,4 +1,8 @@
-# dinkySynth
+# picoSynth
+
+## Status
+
+## Hardware
 
 ## Software
 
@@ -25,7 +29,7 @@ or
 
 Being developed on MacOS but should build on Linux too.
 
-Indirect build for supported targets, rpipico and rpipico2 with cmake and make (or ninja)...
+Indirect build of all supported targets, rpipico2 and native with cmake and make (or ninja)...
 
     make
 
@@ -43,3 +47,7 @@ flashable images will be found under the build sub-directory here...
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## Acknowledgements
+
+ + The raspberry-pi foundation for the innovative [RP2040](https://www.raspberrypi.com/documentation/microcontrollers/rp2040.html)
