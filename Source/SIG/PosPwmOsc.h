@@ -5,33 +5,41 @@
    
 #pragma once
 
-#include <cmath>
-
-#include "Gain.h"
 #include "OscBase.h"
+#include "Gain.h"
 
-class SineOsc : public OscBase
+class PosPwmOsc : public OscBase
 {
 public:
-   SineOsc() = default;
+   PosPwmOsc() = default;
+
+   //! Set pulse width 0.0 => square
+   void setWidth(Sample width_)
+   {
+      limit = PHASE_HALF + sample2phase(width_);
+   }
 
    Sample operator()()
    {
-      float theta = phase2sample(phase) * M_PI;
+      Sample sample = phase >= limit ? 0.0f : +1.0f;
 
       phase += delta;
 
-      return gain(sinf(theta));
+      return gain(sample);
    }
 
    Sample operator()(Sample mod_)
    {
-      float theta = phase2sample(phase) * M_PI;
+      Sample sample = phase >= limit ? 0.0f : +1.0f;
 
       phase += modDelta(mod_);
 
-      return gain(sinf(theta));
+      return gain(sample);
    }
 
    Gain gain{};
+
+private:
+   Phase limit{PHASE_HALF};
 };
+

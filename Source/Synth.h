@@ -105,6 +105,17 @@ protected:
       return value;
    }
 
+   bool modInt(uint8_t& value_, signed delta_, unsigned n_, const char* str_table_[])
+   {
+      if (((delta_ < 0) && (value_ == 0)) ||
+          ((delta_ > 0) && (value_ == (n_ - 1))))
+         return false;
+
+      value_ += delta_;
+      setText(1, str_table_[value_]);
+      return true;
+   }
+
 private:
    static const unsigned MAX_TEXT_LEN   = 16;
    static const unsigned MAX_TEXT_LINES = 2;

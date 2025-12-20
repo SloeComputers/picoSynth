@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "SIG/PosPwmOsc.h"
 #include "SIG/PwmOsc.h"
 #include "SIG/PulseOsc.h"
 #include "SIG/TriOsc.h"
@@ -29,71 +30,60 @@ public:
       perc_env.setSustain(0);
       perc_env.setRelease_mS(0);
 
-      octave_osc.setFreq(2);
+      octave_osc.setFreq(4);
    }
 
    void program(const Program* patch_)
    {
+      voice_transpose = 0;
+      octave_osc.gain = 0.0;
+
       switch(patch_->wave)
       {
       case 0: // Piano
          melody_osc.setPattern(uint16_t(0b1111111111100000));
-         voice_transpose = 0;
-         octave_osc.gain = 0.0;
          break;
 
       case 1: // Fantasy
          melody_osc.setPattern(uint16_t(0b1111000011110000));
-         voice_transpose = 0;
-         octave_osc.gain = 0.0;
          break;
 
       case 2: // Violin
          melody_osc.setPattern(uint16_t(0b1111011101101010));
-         voice_transpose = 0;
-         octave_osc.gain = 0.0;
          break;
 
       case 3: // Flute
          melody_osc.setPattern(uint16_t(0b1111111100000000));
-         voice_transpose = 0;
-         octave_osc.gain = 0.0;
          break;
 
       case 4: // Guitar 1
          melody_osc.setPattern(uint16_t(0b1000000100000000));
          voice_transpose = -12;
-         octave_osc.gain = 0.0;
          break;
 
       case 5: // Guitar 2
          melody_osc.setPattern(uint16_t(0b1011110011000000));
          voice_transpose = -12;
-         octave_osc.gain = 0.0;
          break;
 
       case 6: // English Horn
          melody_osc.setPattern(uint16_t(0b1100000000000000));
          voice_transpose = -12;
-         octave_osc.gain = 0.0;
          break;
 
       case 7: // Electro-Sound 1 (octave modulated Piano)
          melody_osc.setPattern(uint16_t(0b1111111111100000));
-         voice_transpose = 0;
-         octave_osc.gain = 1.0;
+         octave_osc.gain = 12.0;
          break;
 
       case 8: // Electro-Sound 2 (octave modulated Fantasy)
          melody_osc.setPattern(uint16_t(0b1111000011110000));
-         voice_transpose = 0;
-         octave_osc.gain = 1.0;
+         octave_osc.gain = 12.0;
          break;
 
       case 9: // Electro-Sound 3 (octave modulated Flute)
          melody_osc.setPattern(uint16_t(0b1111111100000000));
-         voice_transpose = 0;
-         octave_osc.gain = 1.0;
+         octave_osc.gain = 12.0;
          break;
       }
 
@@ -104,7 +94,7 @@ public:
       melody_env.setRelease_mS(patch_->release_time * 400);
 
       vibrato_osc.setFreq(1 + patch_->vibrato * 1.5);
-      vibrato_osc.gain = patch_->vibrato > 0 ? 0.0002 : 0.0;
+      vibrato_osc.gain = patch_->vibrato > 0 ? 0.1 : 0.0;  // 10 cents
 
       tremolo_on = patch_->tremolo > 0;
       if (tremolo_on)
@@ -116,7 +106,18 @@ public:
 
    void control(const Control* control_)
    {
-      control_transpose = control_->octave * 12;
+      melody_transpose = (signed(control_->octave) - 1) * 12 + control_->tune / 50.0f;
+
+      if (control_->volume == 0)
+         gain = 0.0;
+      else
+         gain.setAtten_dB((99 - control_->volume) * 30.0f / 99);
+
+      float pan = (50 + control_->balance) / 100.0f;
+
+      perc_osc.gain.setPan(pan);
+      perc_noise.gain.setPan(pan);
+      melody_osc.gain.setPan(1.0 - pan);
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -146,7 +147,10 @@ public:
          break;
 
       default:
-         melody_osc.setNote(note_ + control_transpose + voice_transpose);
+         vibrato_osc.sync();
+         tremolo_osc.sync();
+         octave_osc.sync();
+         melody_osc.setNote(note_ + voice_transpose);
          melody_osc.sync();
          melody_env.on();
          mode = MELODY;
@@ -175,9 +179,9 @@ public:
 
       case MELODY:
          {
-            Sample vibrato = vibrato_osc();
+            Sample freq_mod = melody_transpose + vibrato_osc() + octave_osc();
 
-            value = melody_env() * lpf(melody_osc(vibrato));
+            value = melody_env() * lpf(melody_osc(freq_mod));
 
             if (tremolo_on)
             {
@@ -199,12 +203,12 @@ private:
    enum Mode { PERC_OSC, PERC_NOISE, MELODY };
 
    signed         voice_transpose{0};
-   signed         control_transpose{0};
    Mode           mode{};
-   PwmOsc         octave_osc{};
+   PosPwmOsc      octave_osc{};
    TriOsc         vibrato_osc{};
    PulseOsc       melody_osc{};
    Adsr           melody_env{};
+   float          melody_transpose{};
    bool           tremolo_on{false};
    TriOsc         tremolo_osc{};
    Filter::BiQuad lpf{Filter::LOPASS};

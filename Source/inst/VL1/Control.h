@@ -18,16 +18,16 @@ struct Control
 
    void init()
    {
-      volume  = 0x7F;
+      volume  = 99;
       balance = 0;
-      octave  = 0;
+      octave  = 1;
       tune    = 0;
    }
 
-   unsigned volume;  //<! The overall output level
-   signed   balance; //<! Balance between rhythm and melody
-   signed   octave;  //<! The octave
-   signed   tune;    //<! Tuning
+   unsigned volume;  //<! The overall output level [0..99]
+   signed   balance; //<! Balance between rhythm and melody [-50..+50]
+   signed   tune;    //<! Tuning [-50..+50]
+   uint8_t  octave;  //<! The octave [0..+2]
 };
 
 } // namespace VL1

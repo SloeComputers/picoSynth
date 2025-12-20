@@ -32,14 +32,25 @@ public:
       }
    }
 
-   Sample operator()(Sample mod_ = 0)
+   Sample operator()()
    {
       unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
 
-      phase += delta + sample2phase(mod_);
+      phase += delta;
 
-      return pattern[index];
+      return gain(pattern[index]);
    }
+
+   Sample operator()(Sample mod_)
+   {
+      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+
+      phase += modDelta(mod_);
+
+      return gain(pattern[index]);
+   }
+
+   Gain gain{};
 
 private:
    static const unsigned LOG2_PATTERN_LENGTH = 5;

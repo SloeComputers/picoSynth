@@ -13,11 +13,20 @@ class RampOsc : public OscBase
 public:
    RampOsc() = default;
 
-   Sample operator()(Sample mod_ = 0)
+   Sample operator()()
    {
       Sample sample = phase2sample(phase);
 
-      phase += delta + sample2phase(mod_);
+      phase += delta;
+
+      return gain(sample);
+   }
+
+   Sample operator()(Sample mod_)
+   {
+      Sample sample = phase2sample(phase);
+
+      phase += modDelta(mod_); 
 
       return gain(sample);
    }

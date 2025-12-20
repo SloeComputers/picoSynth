@@ -19,12 +19,20 @@ public:
       limit = PHASE_HALF + sample2phase(width_);
    }
 
-   //! Get next sample
-   Sample operator()(Sample mod_ = 0)
+   Sample operator()()
    {
-      Sample sample = phase >= limit ? -1.0 : +1.0;
+      Sample sample = phase >= limit ? -1.0f : +1.0f;
 
-      phase += delta + sample2phase(mod_);
+      phase += delta;
+
+      return gain(sample);
+   }
+
+   Sample operator()(Sample mod_)
+   {
+      Sample sample = phase >= limit ? -1.0f : +1.0f;
+
+      phase += modDelta(mod_);
 
       return gain(sample);
    }

@@ -141,7 +141,7 @@ int main()
    puts(file_portal.addREADME("picoSynth-1"));
    printf("\n");
 
-   lcd.print(">>    pS-1    <<");
+   lcd.print("   picoSynth-1  ");
 
    usleep(1000000);
 

@@ -13,7 +13,7 @@ class TriOsc : public OscBase
 public:
    TriOsc() = default;
 
-   Sample operator()(Sample mod_ = 0)
+   Sample operator()()
    {
       Phase phase_shift = phase + PHASE_QUARTER;
 
@@ -22,7 +22,21 @@ public:
 
       Sample sample = phase2sample(p);
 
-      phase += delta + sample2phase(mod_);
+      phase += delta;
+
+      return gain(sample);
+   }
+
+   Sample operator()(Sample mod_)
+   {
+      Phase phase_shift = phase + PHASE_QUARTER;
+
+      Phase p = phase_shift >= PHASE_HALF ? -phase * 2
+                                          : +phase * 2;
+
+      Sample sample = phase2sample(p);
+
+      phase += modDelta(mod_);
 
       return gain(sample);
    }
