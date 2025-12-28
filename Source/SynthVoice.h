@@ -66,14 +66,9 @@ private:
       }
    }
 
-   virtual bool filterNote(uint8_t midi_note_)
-   {
-      return false;
-   }
-
    void voiceOn(unsigned index_, uint8_t midi_note_, uint8_t velocity_) override
    {
-      if (not filterNote(midi_note_))
+      if (not synthFilterNote(midi_note_))
       {
          voice[index_].noteOn(midi_note_, velocity_);
       }

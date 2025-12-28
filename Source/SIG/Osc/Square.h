@@ -19,9 +19,9 @@ public:
    {
       Sample sample = phase < PHASE_HALF ? +1.0f : -1.0f;
 
-      float t = phase2t(phase);
+      float t = phase2float(phase);
       sample += polyBLEP(t);
-      t = phase2t(phase - PHASE_HALF);
+      t = phase2float(phase - PHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;
@@ -35,9 +35,9 @@ public:
 
       Sample sample = phase < PHASE_HALF ? +1.0f : -1.0f;
 
-      float t = phase2t(phase);
+      float t = phase2float(phase);
       sample += polyBLEP(t);
-      t = phase2t(phase - PHASE_HALF);
+      t = phase2float(phase - PHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;

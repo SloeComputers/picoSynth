@@ -19,7 +19,7 @@ public:
    {
       Sample sample = phase2sample(phase);
 
-      float t = phase2t(phase - PHASE_HALF);
+      float t = phase2float(phase - PHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;
@@ -33,7 +33,7 @@ public:
 
       Sample sample = phase2sample(phase);
 
-      float t = phase2t(phase - PHASE_HALF);
+      float t = phase2float(phase - PHASE_HALF);
       sample -= polyBLEP(t);
 
       phase += delta;

@@ -9,7 +9,7 @@
 
 namespace VL1 {
 
-struct Program
+struct Patch
 {
    uint8_t wave{0};
    uint8_t attack_time{0};
@@ -27,6 +27,6 @@ struct Program
 
 static const unsigned NUM_PROGRAM = 6;
 
-extern Program program[NUM_PROGRAM];
+extern Patch program[NUM_PROGRAM];
 
 } // namespace VL1

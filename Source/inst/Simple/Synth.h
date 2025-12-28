@@ -5,10 +5,10 @@
 
 #pragma once
 
-#include "../SynthVoice.h"
+#include "SynthVoice.h"
 
-#include "Voice.h"
 #include "Effect.h"
+#include "Voice.h"
 #include "Patch.h"
 
 namespace Simple {
@@ -24,11 +24,8 @@ private:
       setText(0, "     simple     ");
    }
 
-   void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
+   void synthControl(uint8_t control_, uint8_t value_) override
    {
-      if (index_ != 0)
-         return;
-
       switch(control_)
       {
       case 19: case 2:

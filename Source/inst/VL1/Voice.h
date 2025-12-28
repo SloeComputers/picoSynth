@@ -7,7 +7,7 @@
 
 #include "SIG/SIG.h"
 
-#include "VL1/Program.h"
+#include "VL1/Patch.h"
 #include "VL1/Control.h"
 #include "VL1/Effect.h"
 
@@ -29,7 +29,7 @@ public:
       octave_osc.setFreq(4);
    }
 
-   void program(const Program* patch_)
+   void program(const Patch* patch_)
    {
       voice_transpose = 0;
       octave_osc.gain = 0.0;

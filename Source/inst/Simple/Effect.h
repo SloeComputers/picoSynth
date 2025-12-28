@@ -7,7 +7,7 @@
 
 #include "SIG/SIG.h"
 
-#include "Simple/Patch.h"
+#include "Patch.h"
 
 namespace Simple {
 

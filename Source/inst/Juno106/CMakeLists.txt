@@ -7,7 +7,7 @@ autogen_py(Table_amp7)
 autogen_py(Table_gain7)
 
 add_library(Juno106 STATIC
-            Program.cpp
+            Patch.cpp
             SysEx.cpp
             Table_amp7.cpp
             Table_gain7.cpp)

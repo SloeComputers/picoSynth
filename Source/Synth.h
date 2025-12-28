@@ -63,6 +63,35 @@ protected:
    {
    }
 
+   virtual void synthProgram(uint8_t num_)
+   {
+   }
+
+   virtual void synthControl(uint8_t control_, uint8_t value_)
+   {
+   }
+
+   virtual bool synthFilterNote(uint8_t midi_note_)
+   {
+      return false;
+   }
+
+   void voiceProgram(unsigned index_, uint8_t num_) override
+   {
+      if (index_ != 0)
+         return;
+
+      synthProgram(num_);
+   }
+
+   void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
+   {
+      if (index_ != 0)
+         return;
+
+      synthControl(control_, value_);
+   }
+
    //! Update text for the given line
    void setText(unsigned line_, const char* text_)
    {

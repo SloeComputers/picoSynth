@@ -5,11 +5,12 @@
 
 #pragma once
 
-#include "../SynthVoice.h"
-#include "VL1/Voice.h"
-#include "VL1/Program.h"
-#include "VL1/Control.h"
-#include "VL1/Effect.h"
+#include "SynthVoice.h"
+
+#include "Effect.h"
+#include "Control.h"
+#include "Patch.h"
+#include "Voice.h"
 
 namespace VL1 {
 
@@ -28,11 +29,8 @@ private:
       initVoices();
    }
 
-   void voiceProgram(unsigned index_, uint8_t num_) override
+   void synthProgram(uint8_t num_) override
    {
-      if ((index_ != 0) || (num_ >= NUM_PROGRAM))
-         return;
-
       patch = program[num_];
 
       patch.print();
@@ -48,11 +46,8 @@ private:
       programVoices(&patch);
    }
 
-   void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
+   void synthControl(uint8_t control_, uint8_t value_) override
    {
-      if (index_ != 0)
-         return;
-
       switch(control_)
       {
       // Controls below map neatly to AKAI MIDImix and MPKmini
@@ -74,7 +69,7 @@ private:
       programVoices(&control);
    }
 
-   bool filterNote(uint8_t midi_note_) override
+   bool synthFilterNote(uint8_t midi_note_) override
    {
       static const char* wave_str[10]  = {"WAVE 0 Piano",
                                           "WAVE 1 Fantasy",
@@ -105,7 +100,7 @@ private:
       return false;
    }
 
-   Program patch{};
+   Patch   patch{};
    Control control{};
 };
 

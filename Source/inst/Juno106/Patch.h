@@ -12,7 +12,7 @@
 
 namespace Juno106 {
 
-struct Program
+struct Patch
 {
    uint8_t     raw[18];
    const char* name;
@@ -20,6 +20,6 @@ struct Program
 
 extern const unsigned NUM_PRESET;
 
-extern Program program[129];
+extern Patch program[129];
 
 }

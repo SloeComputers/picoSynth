@@ -3,6 +3,6 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(VL1 STATIC Program.cpp)
+add_library(VL1 STATIC Patch.cpp)
 
 target_include_directories(VL1 PUBLIC ..)

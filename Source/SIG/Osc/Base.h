@@ -67,7 +67,7 @@ protected:
    void setDelta(Phase delta_)
    {
       delta = delta_;
-      dt    = phase2t(delta_);
+      dt    = phase2float(delta_);
    }
 
    //! Polynomial to pre-filter hard edges in waveforms in the range [-dt, dt]

@@ -5,11 +5,11 @@
 
 #include <cstdio>
 
-#include "Program.h"
+#include "Patch.h"
 
 namespace VL1 {
 
-Program program[NUM_PROGRAM] =
+Patch program[NUM_PROGRAM] =
 {
    { 0, 0, 4, 5, 3, 2, 0, 0,  "Piano  " },
    { 1, 0, 0, 9, 9, 6, 3, 0,  "Fantasy" },
@@ -19,7 +19,7 @@ Program program[NUM_PROGRAM] =
    { 0, 0, 0, 9, 0, 0, 0, 0,  "ADSR   " }
 };
 
-void Program::print() const
+void Patch::print() const
 {
    printf("PATCH %s\n", name);
 }

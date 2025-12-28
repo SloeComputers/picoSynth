@@ -7,11 +7,12 @@
 
 #include <cstring>
 
-#include "../SynthVoiceSysEx.h"
-#include "Juno106/Program.h"
-#include "Juno106/Effect.h"
-#include "Juno106/Voice.h"
-#include "Juno106/SysEx.h"
+#include "SynthVoiceSysEx.h"
+
+#include "Effect.h"
+#include "Patch.h"
+#include "Voice.h"
+#include "SysEx.h"
 
 namespace Juno106 {
 
@@ -73,7 +74,7 @@ private:
    }
 
    //! Override to intercept bottom notes as buttons
-   bool filterNote(uint8_t midi_note_) override
+   bool synthFilterNote(uint8_t midi_note_) override
    {
       // Notes below map neatly to AKAI MIDImix mute and rec/arm button
       switch(midi_note_)
@@ -108,11 +109,8 @@ private:
       return true;
    }
 
-   void voiceControl(unsigned index_, uint8_t control_, uint8_t value_) override
+   void synthControl(uint8_t control_, uint8_t value_) override
    {
-      if (index_ != 0)
-         return;
-
       switch(control_)
       {
       // Controls below map neatly to AKAI MIDImix rotary and slider knobs
@@ -146,12 +144,9 @@ private:
       programVoices(&patch);
    }
 
-   void voiceProgram(unsigned index_, uint8_t num_) override
+   void synthProgram(uint8_t num_) override
    {
-      if (index_ != 0)
-         return;
-
-      const Program& prog = program[num_];
+      const Patch& prog = program[num_];
       setPatch(prog.raw, prog.name);
    }
 

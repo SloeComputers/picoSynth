@@ -36,20 +36,24 @@ public:
 
    Sample operator()()
    {
-      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      unsigned index  = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      Sample   sample = pattern[index];
 
       phase += delta;
 
-      return gain(pattern[index]);
+      return gain(sample);
    }
 
    Sample operator()(Sample mod_)
    {
-      unsigned index = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      setDelta(modDelta(mod_));
 
-      phase += modDelta(mod_);
+      unsigned index  = phase >> (sizeof(Phase) * 8 - LOG2_PATTERN_LENGTH);
+      Sample   sample = pattern[index];
 
-      return gain(pattern[index]);
+      phase += delta;
+
+      return gain(sample);
    }
 
    Gain gain{};

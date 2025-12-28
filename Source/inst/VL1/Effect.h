@@ -7,7 +7,8 @@
 
 #include "SIG/SIG.h"
 
-#include "VL1/Program.h"
+#include "VL1/Patch.h"
+#include "VL1/Control.h"
 
 namespace VL1 {
 
@@ -16,7 +17,7 @@ class Effect
 public:
    Effect() = default;
 
-   void program(const Program* program_)
+   void program(const Patch* patch_)
    {
    }
 
