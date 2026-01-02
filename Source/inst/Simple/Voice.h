@@ -35,7 +35,7 @@ public:
       gain = 0.0;
    }
 
-   Sample sample(const Effect& effect_)
+   Signal sample(const Effect& effect_)
    {
       return gain(osc());
    }

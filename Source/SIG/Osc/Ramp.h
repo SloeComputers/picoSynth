@@ -15,30 +15,30 @@ class Ramp : public Base
 public:
    Ramp() = default;
 
-   Sample operator()()
+   Signal operator()()
    {
-      Sample sample = uphase2sample(phase);
+      Signal signal = uphase2signal(phase);
 
       float t = uphase2float(phase - UPHASE_HALF);
-      sample -= polyBLEP(t);
+      signal -= polyBLEP(t);
 
       phase += delta;
 
-      return gain(sample);
+      return gain(signal);
    }
 
-   Sample operator()(Sample mod_)
+   Signal operator()(Signal mod_)
    {
       setDelta(modDelta(mod_));
 
-      Sample sample = uphase2sample(phase);
+      Signal signal = uphase2signal(phase);
 
       float t = uphase2float(phase - UPHASE_HALF);
-      sample -= polyBLEP(t);
+      signal -= polyBLEP(t);
 
       phase += delta;
 
-      return gain(sample);
+      return gain(signal);
    }
 
    Gain gain{};

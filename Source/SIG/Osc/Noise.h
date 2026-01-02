@@ -14,13 +14,13 @@ class Noise
 public:
    Noise() = default;
 
-   Sample operator()()
+   Signal operator()()
    {
       noise_state ^= noise_state << 13;
       noise_state ^= noise_state >> 17;
       noise_state ^= noise_state << 5;
 
-      return gain(float(int32_t(noise_state)) / 0x7FFFFFFF);
+      return gain(Signal(int32_t(noise_state)) / 0x7FFFFFFF);
    }
 
    Gain gain{};

@@ -27,9 +27,9 @@ public:
    }
 
    //! Signal processing post voice signal generation on the summed voices
-   Sample post(Sample sample_)
+   Signal post(Signal signal_)
    {
-      return sample_;
+      return signal_;
    }
 };
 

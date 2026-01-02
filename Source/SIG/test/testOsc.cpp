@@ -16,12 +16,12 @@ TEST(SIG_osc, square)
       osc.sync();
       osc.setFreq(freq);
 
-      Sample   last{0.0};
+      Signal   last{0.0};
       unsigned start{0};
 
       for(unsigned i = 0; i < 1000; ++i)
       {
-         Sample value = osc();
+         Signal value = osc();
 
          EXPECT_LE(-1.0f, value);
          EXPECT_GE(+1.0f, value);
@@ -49,5 +49,29 @@ TEST(SIG_osc, square)
 
          last = value;
       }
+   }
+}
+
+TEST(SIG_osc, pulse)
+{
+   Osc::Pulse  osc{};
+   Osc::Square ref{};
+
+   osc.setPattern(uint16_t(0xFF00));
+
+   osc.setFreq(440.0);
+   ref.setFreq(440.0);
+
+   osc.sync();
+   ref.sync();
+
+   (void)osc();
+
+   for(unsigned i = 0; i < 1000; ++i)
+   {
+      Signal value     = osc();
+      Signal ref_value = ref();
+
+      printf("%7.4f   %7.4f   %7.4f\n", value, ref_value, value - ref_value);
    }
 }

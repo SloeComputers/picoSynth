@@ -5,7 +5,7 @@
    
 #pragma once
 
-#include "Sample.h"
+#include "SIG.h"
 
 template <unsigned LENGTH>
 class Delay
@@ -13,12 +13,12 @@ class Delay
 public:
    Delay() = default;
 
-   Sample operator()() const
+   Signal operator()() const
    {
       return buffer[index];
    }
 
-   void operator=(Sample x_)
+   void operator=(Signal x_)
    {
       buffer[index] = x_;
 
@@ -26,9 +26,9 @@ public:
          index = 0;
    }
 
-   Sample operator()(Sample x_)
+   Signal operator()(Signal x_)
    {
-      Sample y = buffer[index];
+      Signal y = buffer[index];
 
       operator=(x_);
 
@@ -37,5 +37,5 @@ public:
 
 private:
    unsigned index{};
-   Sample   buffer[LENGTH];
+   Signal   buffer[LENGTH];
 };

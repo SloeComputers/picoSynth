@@ -15,32 +15,32 @@ class Triangle : public Base
 public:
    Triangle() = default;
 
-   Sample operator()()
+   Signal operator()()
    {
       UPhase phase_shift = phase + UPHASE_QUARTER;
 
       UPhase p = phase_shift >= UPHASE_HALF ? -phase * 2
                                           : +phase * 2;
 
-      Sample sample = uphase2sample(p);
+      Signal signal = uphase2signal(p);
 
       phase += delta;
 
-      return gain(sample);
+      return gain(signal);
    }
 
-   Sample operator()(Sample mod_)
+   Signal operator()(Signal mod_)
    {
       UPhase phase_shift = phase + UPHASE_QUARTER;
 
       UPhase p = phase_shift >= UPHASE_HALF ? -phase * 2
                                           : +phase * 2;
 
-      Sample sample = uphase2sample(p);
+      Signal signal = uphase2signal(p);
 
       phase += modDelta(mod_);
 
-      return gain(sample);
+      return gain(signal);
    }
 
    Gain gain{};

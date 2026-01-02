@@ -5,7 +5,7 @@
    
 #pragma once
 
-#include "SIG/Sample.h"
+#include "SIG/Types.h"
 
 #include "Table_delta14_7.h"
 
@@ -33,7 +33,7 @@ public:
    {
       float ratio = freq_hz_ / SAMPLE_RATE;
 
-      setDelta(sample2uphase(ratio * 2.0));
+      setDelta(signal2uphase(ratio * 2.0));
    }
 
    //! Set frequency for MIDI note value
@@ -59,7 +59,7 @@ public:
 
 protected:
    //! Calculate delta for a frequency modulation input
-   uint32_t modDelta(Sample mod_)
+   uint32_t modDelta(Signal mod_)
    {
       return table_delta14_7[exp_freq + signed(EXP_FREQ_SCALE * mod_)];
    }

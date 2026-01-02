@@ -91,20 +91,20 @@ public:
       gate = 0.0;
    }
 
-   Sample sample(const Effect& effect_)
+   Signal sample(const Effect& effect_)
    {
-      Sample lfo_out = effect_.lfo_out * lfo_env();
+      Signal lfo_out = effect_.lfo_out * lfo_env();
 
       if (dco_pwm_lfo)
       {
          dco_pwm.setWidth((1.0 + lfo_out) * dco_pwm_lfo_gain);
       }
 
-      Sample fmod = lfo_out * dco_lfo;
+      Signal fmod = lfo_out * dco_lfo;
 
-      Sample dco_out = (dco_saw(fmod) + dco_pwm(fmod) + dco_sub(fmod) + noise()) / 4;
+      Signal dco_out = (dco_saw(fmod) + dco_pwm(fmod) + dco_sub(fmod) + noise()) / 4;
 
-      Sample env_out = env();
+      Signal env_out = env();
 
       return vca(vcf(dco_out) * (vca_gate ? gate : env_out));
    }
@@ -132,8 +132,8 @@ private:
    uint8_t        note{};
    Osc::Triangle  lfo{};
    LfoEnv         lfo_env{};
-   Sample         dco_lfo{};
-   Sample         dco_pwm_lfo_gain{};
+   Signal         dco_lfo{};
+   Signal         dco_pwm_lfo_gain{};
    bool           dco_pwm_lfo{};
    Osc::Ramp      dco_saw{};
    Osc::Pwm       dco_pwm{};
@@ -143,7 +143,7 @@ private:
    Filter::BiQuad vcf{Filter::LOPASS};
    Gain           vca{};
    bool           vca_gate{};
-   Sample         gate{};
+   Signal         gate{};
 };
 
 } // namespace Juno106

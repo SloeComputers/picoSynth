@@ -30,12 +30,12 @@ public:
       lfo_out = lfo();
    }
 
-   Sample post(Sample sample_)
+   Signal post(Signal signal_)
    {
-      return sample_;
+      return signal_;
    }
 
-   Sample lfo_out{};
+   Signal lfo_out{};
 
 private:
    //! Scale a MIDI parameter 0..127 to a floating point value

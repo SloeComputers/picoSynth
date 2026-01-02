@@ -5,9 +5,9 @@
    
 #pragma once
 
+#include "Types.h"
 #include "Delay.h"
 #include "Env/Env.h"
 #include "Filter/Filter.h"
 #include "Gain.h"
 #include "Osc/Osc.h"
-#include "Type.h"

@@ -38,7 +38,7 @@ public:
    }
 
    //! Return next envelope sample
-   Sample operator()()
+   Signal operator()()
    {
       level += rate;
 
@@ -65,10 +65,10 @@ private:
    enum EnvPhase { DELAY, ATTACK, SUSTAIN };
 
    EnvPhase phase{SUSTAIN};
-   Sample   level{0.0};
-   Sample   rate{0.0};
+   Signal   level{0.0};
+   Signal   rate{0.0};
    unsigned samples{0};
    unsigned delay_samples{0};
    unsigned attack_samples{};
-   Sample   attack_rate{0.0};
+   Signal   attack_rate{0.0};
 };

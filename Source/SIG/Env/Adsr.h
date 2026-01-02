@@ -92,7 +92,7 @@ public:
    void mute() { setPhase(OFF); }
 
    //! Return next envelope sample
-   Sample operator()()
+   Signal operator()()
    {
       level += rate;
 

@@ -29,9 +29,9 @@ public:
    {
    }
 
-   Sample post(Sample sample_)
+   Signal post(Signal signal_)
    {
-      return sample_;
+      return signal_;
    }
 };
 

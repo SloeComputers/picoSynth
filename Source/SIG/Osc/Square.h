@@ -15,34 +15,34 @@ class Square : public Base
 public:
    Square() = default;
 
-   Sample operator()()
+   Signal operator()()
    {
-      Sample sample = phase < UPHASE_HALF ? +1.0f : -1.0f;
+      Signal signal = phase < UPHASE_HALF ? +1.0f : -1.0f;
 
       float t = uphase2float(phase);
-      sample += polyBLEP(t);
+      signal += polyBLEP(t);
       t = uphase2float(phase - UPHASE_HALF);
-      sample -= polyBLEP(t);
+      signal -= polyBLEP(t);
 
       phase += delta;
 
-      return gain(sample);
+      return gain(signal);
    }
 
-   Sample operator()(Sample mod_)
+   Signal operator()(Signal mod_)
    {
       setDelta(modDelta(mod_));
 
-      Sample sample = phase < UPHASE_HALF ? +1.0f : -1.0f;
+      Signal signal = phase < UPHASE_HALF ? +1.0f : -1.0f;
 
       float t = uphase2float(phase);
-      sample += polyBLEP(t);
+      signal += polyBLEP(t);
       t = uphase2float(phase - UPHASE_HALF);
-      sample -= polyBLEP(t);
+      signal -= polyBLEP(t);
 
       phase += delta;
 
-      return gain(sample);
+      return gain(signal);
    }
 
    Gain gain{};

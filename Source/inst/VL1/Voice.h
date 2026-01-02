@@ -156,9 +156,9 @@ public:
       env.off();
    }
 
-   Sample sample(const Effect& effect_)
+   Signal sample(const Effect& effect_)
    {
-      Sample value;
+      Signal value;
 
       switch(mode)
       {
@@ -172,7 +172,7 @@ public:
 
       case MELODY:
          {
-            Sample freq_mod = melody_transpose + vibrato() + octave_osc();
+            Signal freq_mod = melody_transpose + vibrato() + octave_osc();
 
             value = env() * lpf(melody(freq_mod));
 

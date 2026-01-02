@@ -13,9 +13,9 @@ class FBComb
 public:
    FBComb() = default;
 
-   Sample operator()(Sample x_)
+   Signal operator()(Signal x_)
    {
-      Sample y = x_ + alpha(delay());
+      Signal y = x_ + alpha(delay());
 
       delay = y;
 

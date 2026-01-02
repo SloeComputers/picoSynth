@@ -7,13 +7,13 @@
 
 #include <cmath>
 
-#include "Sample.h"
+#include "Types.h"
 #include "Table_atten15.h"
 
 class Gain
 {
 public:
-   Gain(Sample value_ = 1.0) : value(value_) {}
+   Gain(Signal value_ = 1.0) : value(value_) {}
 
    //! Set attenuation in dB
    void setAtten_dB(float atten_)
@@ -29,17 +29,17 @@ public:
    }
 
    //! Set gain using a sine panning function [0..1] => [0..1]
-   void setPan(Sample pan_)
+   void setPan(Signal pan_)
    {
       value = sinf(pan_ * float(M_PI) / 2.0f);
    }
 
-   operator Sample() const { return value; }
+   operator Signal() const { return value; }
 
-   Sample operator=(Sample value_) { return value = value_; }
+   Signal operator=(Signal value_) { return value = value_; }
 
-   Sample operator()(Sample in_) { return in_ * value; }
+   Signal operator()(Signal in_) { return in_ * value; }
 
 private:
-   Sample value{1.0};
+   Signal value{1.0};
 };

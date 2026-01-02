@@ -13,7 +13,7 @@ class FFComb
 public:
    FFComb() = default;
 
-   Sample operator()(Sample x_)
+   Signal operator()(Signal x_)
    {
       return x_ + alpha(delay(x_));
    }

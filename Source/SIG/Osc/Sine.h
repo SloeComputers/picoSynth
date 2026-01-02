@@ -17,18 +17,18 @@ class Sine : public Base
 public:
    Sine() = default;
 
-   Sample operator()()
+   Signal operator()()
    {
-      float theta = uphase2sample(phase) * M_PI;
+      float theta = uphase2signal(phase) * M_PI;
 
       phase += delta;
 
       return gain(sinf(theta));
    }
 
-   Sample operator()(Sample mod_)
+   Signal operator()(Signal mod_)
    {
-      float theta = uphase2sample(phase) * M_PI;
+      float theta = uphase2signal(phase) * M_PI;
 
       phase += modDelta(mod_);
 

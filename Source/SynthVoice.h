@@ -44,7 +44,7 @@ private:
    {
       effect.pre();
 
-      Sample output = 0.0;
+      Signal output = 0.0;
 
       for(unsigned i = 0; i < NUM_VOICES; ++i)
       {

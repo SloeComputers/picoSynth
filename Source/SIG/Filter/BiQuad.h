@@ -7,7 +7,7 @@
 
 #include <cmath>
 
-#include "SIG/Sample.h"
+#include "SIG/Types.h"
 #include "SIG/Filter/Type.h"
 
 namespace Filter {
@@ -61,7 +61,7 @@ public:
       computeCoef();
    }
 
-   Sample operator()(Sample x_)
+   Signal operator()(Signal x_)
    {
       x[0] = x_;
 
@@ -156,9 +156,9 @@ private:
    float a[3] = {};
    float b[3] = {};
 
-   // Sample pipeline
-   Sample x[3] = {}; //!< Input
-   Sample y[3] = {}; //!< Output
+   // Signal pipeline
+   Signal x[3] = {}; //!< Input
+   Signal y[3] = {}; //!< Output
 };
 
 } // namespace Filter
