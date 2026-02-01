@@ -22,6 +22,29 @@ public:
    Synth()
       : SynthVoiceSysEx(MIDI_MANUF_ID)
    {
+      // Controls below map neatly to AKAI MIDImix rotary and slider knobs
+      addCtrl<uint8_t>(16, 2, 0, 99, "LFO RATE",  "1", patch.lfo_rate);
+      addCtrl<uint8_t>(20, 3, 0, 99, "LFO DELAY", "1", patch.lfo_delay);
+
+      addCtrl<uint8_t>(19, 4, 0, 99, "DCO LFO",   "1", patch.dco_lfo);
+      addCtrl<uint8_t>(23, 5, 0, 99, "DCO PWM",   "1", patch.dco_pwm);
+      addCtrl<uint8_t>(27, 6, 0, 99, "DCO SUB",   "1", patch.sub_osc_level);
+      addCtrl<uint8_t>(31, 7, 0, 99, "DCO NOISE", "1", patch.noise_level);
+
+      //addCtrl<uint8_t>(18, 0, 0,  3, "HPF",       "1", patch.hpf);
+
+      addCtrl<uint8_t>(22, 8, 0, 99, "VCF FREQ",  "1", patch.vcf_freq);
+      addCtrl<uint8_t>(26, 9, 0, 99, "VCF RES",   "1", patch.vcf_res);
+      addCtrl<uint8_t>(30, 0, 0, 99, "VCF ENV",   "1", patch.vcf_env);
+      addCtrl<uint8_t>(48, 0, 0, 99, "VCF LFO",   "1", patch.vcf_lfo);
+      addCtrl<uint8_t>(52, 0, 0, 99, "VCF KYBD",  "1", patch.vcf_kbd);
+
+      addCtrl<uint8_t>(62, 0, 0, 99, "VCA LEVEL", "1", patch.vca_level);
+
+      addCtrl<uint8_t>(49, 0, 0, 99, "ENV A",     "1", patch.env_attack);
+      addCtrl<uint8_t>(53, 0, 0, 99, "ENV D",     "1", patch.env_decay);
+      addCtrl<uint8_t>(57, 0, 0, 99, "ENV S",     "1", patch.env_sustain);
+      addCtrl<uint8_t>(61, 0, 0, 99, "ENV R",     "1", patch.env_release);
    }
 
 private:
@@ -45,14 +68,6 @@ private:
    {
       setText(1, text_);
       return value_;
-   }
-
-   uint8_t editDec(const char* name_, uint8_t value_)
-   {
-      char     text[17];
-      unsigned scaled_value = value_ * 99 / 127;
-      snprintf(text, sizeof(text), "%s %u.%u", name_, scaled_value / 10, scaled_value % 10);
-      return edit(text, value_);
    }
 
    uint8_t editNum(const char* name_, uint8_t value_)
@@ -102,46 +117,27 @@ private:
          break;
 
       default:
-         return false;
+         return ::Synth::synthFilterNote(midi_note_);
       }
 
       programVoices(&patch);
       return true;
    }
 
+   void synthEdit() override
+   {
+      programVoices(&patch);
+   }
+
    void synthControl(uint8_t control_, uint8_t value_) override
    {
       switch(control_)
       {
-      // Controls below map neatly to AKAI MIDImix rotary and slider knobs
-      case 16: patch.lfo_rate      = editDec("LFO RATE", value_); break;
-      case 20: patch.lfo_delay     = editDec("LFO DELAY", value_); break;
-
-      case 19: patch.dco_lfo       = editDec("DCO LFO", value_); break;
-      case 23: patch.dco_pwm       = editDec("DCO PWM", value_); break;
-      case 27: patch.sub_osc_level = editDec("DCO SUB", value_); break;
-      case 31: patch.noise_level   = editDec("DCO NOISE", value_); break;
-
-      case 18: patch.hpf           = editNum("HPF", (value_ >> 5)) ^ 0b11; break;
-
-      case 22: patch.vcf_freq      = editDec("VCF FREQ", value_); break;
-      case 26: patch.vcf_res       = editDec("VCF RES", value_); break;
-      case 30: patch.vcf_env       = editDec("VCF ENV", value_); break;
-      case 48: patch.vcf_lfo       = editDec("VCF LFO", value_); break;
-      case 52: patch.vcf_kbd       = editDec("VCF KYBD", value_); break;
-
-      case 62: patch.vca_level     = editDec("VCA LEVEL", value_); break;
-
-      case 49: patch.env_attack    = editDec("ENV A", value_); break;
-      case 53: patch.env_decay     = editDec("ENV D", value_); break;
-      case 57: patch.env_sustain   = editDec("ENV S", value_); break;
-      case 61: patch.env_release   = editDec("ENV R", value_); break;
-
-      default:
-         break;
+      case 18: patch.hpf = editNum("HPF", (value_ >> 5)) ^ 0b11; programVoices(&patch); return;
+      default: break;
       }
 
-      programVoices(&patch);
+      ::Synth::synthControl(control_, value_);
    }
 
    void synthProgram(uint8_t num_) override

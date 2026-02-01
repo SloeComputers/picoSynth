@@ -16,7 +16,10 @@ namespace Simple {
 class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
 public:
-   Synth() = default;
+   Synth()
+   {
+      addCtrl<unsigned>(19, 2, 0, 127, "VALUE", "", patch.value);
+   }
 
 private:
    void synthInit() override
@@ -24,15 +27,9 @@ private:
       setText(0, "     simple     ");
    }
 
-   void synthControl(uint8_t control_, uint8_t value_) override
+   void synthEdit() override
    {
-      switch(control_)
-      {
-      case 19: case 2:
-         patch.value = editInt("VALUE", value_, 0, 127);
-         programVoices(&patch);
-         break;
-      }
+      programVoices(&patch);
    }
 
    Patch patch{};

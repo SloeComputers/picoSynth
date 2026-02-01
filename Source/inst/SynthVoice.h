@@ -36,26 +36,6 @@ protected:
       }
    }
 
-   template <typename TYPE>
-   bool tableControl(uint8_t    control_,
-                     uint8_t    value_,
-                     const TYPE control_table_[],
-                     unsigned   num_control_)
-   {
-      for(unsigned i = 0; i < num_control_; ++i)
-      {
-         const TYPE& c = control_table_[i];
-
-         if ((c.midi1 == control_) || (c.midi2 == control_))
-         {
-            *c.patch = editFlt(c.name, value_, c.min, c.max, c.unit);
-            return true;
-         }
-      }
-
-      return false;
-   }
-
    EFFECT effect{};
    VOICE  voice[NUM_VOICES];
 

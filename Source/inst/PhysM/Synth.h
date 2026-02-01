@@ -6,7 +6,6 @@
 #pragma once
 
 #include "SynthVoice.h"
-#include "Control.h"
 
 #include "Effect.h"
 #include "Voice.h"
@@ -17,7 +16,16 @@ namespace PhysM {
 class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
 public:
-   Synth() = default;
+   Synth()
+   {
+      addCtrl<float>(19, 2,   1.0,     10.0, "Exc Frq",  "Hz", patch.exciter_freq);
+      addCtrl<float>(23, 3,  -0.999,   -0.9, "Exc Len",  "",   patch.exciter_length);
+      addCtrl<float>(27, 4, 100.0,  10000.0, "Exc Cut",  "Hz", patch.exciter_cutoff);
+      addCtrl<float>(31, 5,   0.0,     10.0, "Loop Dly", "mS", patch.delay);
+      addCtrl<float>(49, 6, 100.0,  10000.0, "Loop Cut", "Hz", patch.delay_cutoff);
+      addCtrl<float>(53, 7,  -1.0,      1.0, "Loop FB",  "",   patch.feedback);
+      addCtrl<float>(62, 9, -60.0,     20.0, "Volume",   "dB", patch.volume);
+   }
 
 private:
    void synthInit() override
@@ -30,28 +38,12 @@ private:
       programVoices(&patch);
    }
 
-   void synthControl(uint8_t control_, uint8_t value_) override
+   void synthEdit() override
    {
-      if (this->tableControl(control_, value_, control, NUM_CONTROL))
-      {
-         programVoices(&patch);
-      }
+      programVoices(&patch);
    }
 
    Patch patch{};
-
-   static const unsigned NUM_CONTROL = 7;
-
-   const Control<float> control[NUM_CONTROL] =
-   {
-      {19, 2,   1.0,     10.0, "Exc Frq",  "Hz", &patch.exciter_freq},
-      {23, 3,  -0.999,   -0.9, "Exc Len",  "",   &patch.exciter_length},
-      {27, 4, 100.0,  10000.0, "Exc Cut",  "Hz", &patch.exciter_cutoff},
-      {31, 5,   0.0,     10.0, "Loop Dly", "mS", &patch.delay},
-      {49, 6, 100.0,  10000.0, "Loop Cut", "Hz", &patch.delay_cutoff},
-      {53, 7,  -1.0,      1.0, "Loop FB",  "",   &patch.feedback},
-      {62, 9, -60.0,     20.0, "Volume",   "dB", &patch.volume},
-   };
 };
 
 } // namespace PhysM

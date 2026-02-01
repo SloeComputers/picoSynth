@@ -7,6 +7,9 @@
 
 #include "STB/MIDIInstrument.h"
 
+#include "Control.h"
+#include "NoteButton.h"
+
 //! Synth external interface
 class Synth : public MIDI::Instrument
 {
@@ -67,12 +70,41 @@ protected:
    {
    }
 
-   virtual void synthControl(uint8_t control_, uint8_t value_)
+   virtual void synthEdit()
    {
+   }
+
+   virtual void synthControl(uint8_t midi_control_, uint8_t value_)
+   {
+      for(unsigned i = 0; i < num_control; ++i)
+      {
+         const Control& ctrl = control[i];
+         char            text[17];
+
+         if (ctrl.edit(midi_control_, value_, text, sizeof(text)))
+         {
+            setText(1, text);
+            synthEdit();
+            break;
+         }
+      }
    }
 
    virtual bool synthFilterNote(uint8_t midi_note_)
    {
+      for(unsigned i = 0; i < num_button; ++i)
+      {
+         const NoteButton& btn = button[i];
+         const char*       text{};
+
+         if (btn.edit(midi_note_, text))
+         {
+            setText(1, text);
+            synthEdit();
+            return true;
+         }
+      }
+
       return false;
    }
 
@@ -90,6 +122,33 @@ protected:
          return;
 
       synthControl(control_, value_);
+   }
+
+   //! Add a MIDI variable control
+   template <typename TYPE>
+   void addCtrl(uint8_t     midi1_,
+                uint8_t     midi2_,
+                TYPE        min_,
+                TYPE        max_,
+                const char* name_,
+                const char* unit_,
+                TYPE&       patch_)
+   {
+      Control& ctrl = control[num_control++];
+
+      ctrl.init<TYPE>(midi1_, midi2_, min_, max_, name_, unit_, patch_);
+   }
+
+   //! Add a MIDI note button control
+   void addBtn(uint8_t     note_up_,
+               uint8_t     note_dn_,
+               uint8_t     max_,
+               const char* enum_table_[],
+               uint8_t&    patch_)
+   {
+      NoteButton& btn = button[num_button++];
+
+      btn.init(note_up_, note_dn_, max_, enum_table_, patch_);
    }
 
    //! Update text for the given line
@@ -115,76 +174,21 @@ protected:
       number_update = true;
    }
 
-   signed editInt(const char* name_,
-                  uint8_t     midi_value_,
-                  signed      min_,
-                  signed      max_,
-                  const char* unit_ = "")
-   {
-      signed value = min_ + midi_value_ * (max_ - min_) / 127;
-
-      char text[17];
-      if (min_ < 0)
-      {
-         char sign = value < 0 ? '-' : value > 0 ? '+' : ' ';
-         snprintf(text, sizeof(text), "%s %c%d %s", name_, sign, abs(value), unit_);
-      }
-      else
-      {
-         snprintf(text, sizeof(text), "%s %d %s", name_, value, unit_);
-      }
-      setText(1, text);
-
-      return value;
-   }
-
-   float editFlt(const char* name_,
-                 uint8_t     midi_value_,
-                 float       min_,
-                 float       max_,
-                 const char* unit_ = "")
-   {
-      float value = min_ + midi_value_ * (max_ - min_) / 127.0f;
-
-      char text[17];
-      if (min_ < 0.0f)
-      {
-         char sign        = value < 0.0f ? '-' : value > 0.0f ? '+' : ' ';
-         unsigned valx100 = abs(signed(value * 100.0f));
-         unsigned units   = valx100 / 100;
-         unsigned frac    = valx100 % 100;
-         snprintf(text, sizeof(text), "%s %c%u.%02u %s", name_, sign, units, frac, unit_);
-      }
-      else
-      {
-         unsigned valx100 = unsigned(value * 100.0f);
-         unsigned units   = valx100 / 100;
-         unsigned frac    = valx100 % 100;
-         snprintf(text, sizeof(text), "%s %u.%02u %s", name_, units, frac, unit_);
-      }
-      setText(1, text);
-
-      return value;
-   }
-
-   bool modInt(uint8_t& value_, signed delta_, unsigned n_, const char* str_table_[])
-   {
-      if (((delta_ < 0) && (value_ == 0)) ||
-          ((delta_ > 0) && (value_ == (n_ - 1))))
-         return false;
-
-      value_ += delta_;
-      setText(1, str_table_[value_]);
-      return true;
-   }
-
 private:
    static const unsigned MAX_TEXT_LEN   = 16;
    static const unsigned MAX_TEXT_LINES = 2;
+   static const unsigned MAX_CONTROL    = 33;
+   static const unsigned MAX_BUTTON     = 12;
 
    char text[MAX_TEXT_LINES][MAX_TEXT_LEN + 1];
    bool text_update[MAX_TEXT_LINES] = {};
 
    unsigned number{0};
    unsigned number_update{false};
+
+   unsigned num_control{0};
+   Control  control[MAX_CONTROL];
+
+   unsigned   num_button{0};
+   NoteButton button[MAX_BUTTON];
 };

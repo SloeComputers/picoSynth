@@ -16,83 +16,32 @@ namespace AcornProton {
 class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 {
 public:
-   Synth() = default;
+   Synth()
+   {
+      addCtrl<uint8_t>(16, 0,    1, 127, "ENV T",   "", patch.env_t);
+      addCtrl<int8_t> (17, 0, -128, 127, "ENV PI1", "", patch.env_pi1);
+      addCtrl<int8_t> (21, 0, -128, 127, "ENV PI2", "", patch.env_pi2);
+      addCtrl<int8_t> (25, 0, -128, 127, "ENV PI3", "", patch.env_pi3);
+      addCtrl<uint8_t>(18, 0,    0, 255, "ENV PN1", "", patch.env_pn1);
+      addCtrl<uint8_t>(22, 0,    0, 255, "ENV PN2", "", patch.env_pn2);
+      addCtrl<uint8_t>(26, 0,    0, 255, "ENV PN3", "", patch.env_pn3);
+      addCtrl<int8_t> (19, 0, -127, 127, "ENV AA",  "", patch.env_aa);
+      addCtrl<int8_t> (23, 0, -127, 127, "ENV AD",  "", patch.env_ad);
+      addCtrl<int8_t> (27, 0, -127,   0, "ENV AS",  "", patch.env_as);
+      addCtrl<int8_t> (31, 0, -127,   0, "ENV AR",  "", patch.env_ar);
+      addCtrl<uint8_t>(49, 0,    0, 126, "ENV ALA", "", patch.env_ala);
+      addCtrl<uint8_t>(53, 0,    0, 126, "ENV ALD", "", patch.env_ald);
+   }
 
 private:
    void synthInit() override
    {
       setText(0, "  Acorn Proton  ");
    }
-
-   void synthControl(uint8_t control_, uint8_t value_) override
+ 
+   void synthEdit() override
    {
-      switch(control_)
-      {
-      case 16:
-         patch.env_t = editInt("ENV T", value_, 1, 127);
-         programVoices(&patch);
-         break;
-
-      case 17:
-         patch.env_pi1 = editInt("ENV PI1", value_, -128, 127);
-         programVoices(&patch);
-         break;
-
-      case 21:
-         patch.env_pi2 = editInt("ENV PI2", value_, -128, 127);
-         programVoices(&patch);
-         break;
-
-      case 25:
-         patch.env_pi3 = editInt("ENV PI3", value_, -128, 127);
-         programVoices(&patch);
-         break;
-
-      case 18:
-         patch.env_pn1 = editInt("ENV PN1", value_, 0, 255);
-         programVoices(&patch);
-         break;
-
-      case 22:
-         patch.env_pn2 = editInt("ENV PN2", value_, 0, 255);
-         programVoices(&patch);
-         break;
-
-      case 26:
-         patch.env_pn3 = editInt("ENV PN3", value_, 0, 255);
-         programVoices(&patch);
-         break;
-
-      case 19:
-         patch.env_aa = editInt("ENV AA", value_, -127, 127);
-         programVoices(&patch);
-         break;
-
-      case 23:
-         patch.env_ad = editInt("ENV AD", value_, -127, 127);
-         programVoices(&patch);
-         break;
-
-      case 27:
-         patch.env_as = editInt("ENV AS", value_, -127, 0);
-         programVoices(&patch);
-         break;
-
-      case 31:
-         patch.env_ar = editInt("ENV AR", value_, -127, 0);
-         programVoices(&patch);
-         break;
-
-      case 49:
-         patch.env_ala = editInt("ENV ALA", value_, 0, 126);
-         programVoices(&patch);
-         break;
-
-      case 53:
-         patch.env_ald = editInt("ENV ALD", value_, 0, 126);
-         programVoices(&patch);
-         break;
-      }
+      programVoices(&patch);
    }
 
    Patch patch{};
