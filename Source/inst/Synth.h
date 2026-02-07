@@ -68,6 +68,7 @@ protected:
 
    virtual void synthProgram(uint8_t num_)
    {
+      synthEdit();
    }
 
    virtual void synthEdit()
@@ -132,11 +133,13 @@ protected:
                 TYPE        max_,
                 const char* name_,
                 const char* unit_,
-                TYPE&       patch_)
+                TYPE&       patch_,
+                unsigned    width_ = 0,
+                unsigned    lsb_   = 0)
    {
       Control& ctrl = control[num_control++];
 
-      ctrl.init<TYPE>(midi1_, midi2_, min_, max_, name_, unit_, patch_);
+      ctrl.init<TYPE>(midi1_, midi2_, min_, max_, name_, unit_, patch_, width_, lsb_);
    }
 
    //! Add a MIDI note button control
@@ -144,11 +147,22 @@ protected:
                uint8_t     note_dn_,
                uint8_t     max_,
                const char* enum_table_[],
-               uint8_t&    patch_)
+               uint8_t&    patch_,
+               unsigned    width_ = 8,
+               unsigned    lsb_   = 0)
    {
       NoteButton& btn = button[num_button++];
 
-      btn.init(note_up_, note_dn_, max_, enum_table_, patch_);
+      btn.init(note_up_, note_dn_, max_, enum_table_, patch_, width_, lsb_);
+   }
+
+   //! Add a MIDI note toggle button control
+   void addTgl(uint8_t     note_,
+               const char* enum_table_[],
+               uint8_t&    patch_,
+               unsigned    bit_pos_ = 0)
+   {
+      addBtn(note_, note_, /* max */ 1, enum_table_, patch_, /* width */ 1, bit_pos_);
    }
 
    //! Update text for the given line

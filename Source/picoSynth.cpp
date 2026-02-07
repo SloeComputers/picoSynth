@@ -18,19 +18,21 @@
 #include "PhysM/Synth.h"
 #include "Simple/Synth.h"
 #include "AcornProton/Synth.h"
+#include "TB-303/Synth.h"
 
 static const bool     MIDI_DEBUG       = false;
 static const bool     PROFILE          = false;
 
 static const unsigned TICK_RATE        = 800;                           //!< 800 Hz
 static const unsigned SAMPLES_PER_TICK = SIG::SAMPLE_RATE / TICK_RATE;  //!< DAC buffer size (16 bit samples)
-static const unsigned NUM_SYNTHS       = 5;
+static const unsigned NUM_SYNTHS       = 6;
 
-static Juno106::Synth  juno106{};
-static VL1::Synth      vl1{};
-static PhysM::Synth    physm{};
-static Simple::Synth   simple{};
-static AcornProton::Synth bbc_micro{};
+static Juno106::Synth     juno106{};
+static VL1::Synth         vl1{};
+static PhysM::Synth       physm{};
+static Simple::Synth      simple{};
+static AcornProton::Synth acorn_proton{};
+static TB_303::Synth      tb_303{};
 
 static Synth*         synth{};
 static unsigned       synth_index{0};
@@ -119,11 +121,12 @@ void initSynth()
 {
    switch(synth_index)
    {
-   case 0: synth = &juno106;   break;
-   case 1: synth = &vl1;       break;
-   case 2: synth = &physm;     break;
-   case 3: synth = &bbc_micro; break;
-   case 4: synth = &simple;    break;
+   case 0: synth = &juno106;      break;
+   case 1: synth = &vl1;          break;
+   case 2: synth = &physm;        break;
+   case 3: synth = &acorn_proton; break;
+   case 4: synth = &tb_303;       break;
+   case 5: synth = &simple;       break;
    }
 
    usb.attachInstrument(1, *synth);

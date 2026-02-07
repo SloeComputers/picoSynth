@@ -9,6 +9,8 @@
 #include <cstdint>
 #include <cstdio>
 
+#include "PatchRef.h"
+
 //! Link a MIDI control to a patch value with linear scaling
 class Control
 {
@@ -22,7 +24,9 @@ public:
              TYPE        max_,
              const char* name_,
              const char* unit_,
-             TYPE&       patch_)
+             TYPE&       patch_,
+             unsigned    width_ = 0,
+             unsigned    lsb_   = 0)
    {
       if (std::is_floating_point_v<TYPE>)
       {
@@ -44,11 +48,17 @@ public:
          case 2: type = is_signed ? INT16 : UINT16; break;
          case 4: type = is_signed ? INT32 : UINT32; break;
          }
+
+         if ((type == UINT8) && (width_ != 0))
+         {
+            type  = UINT8_FIELD;
+            flags = ((width_ & 0b111) << 3) | (lsb_ & 0b111);
+         }
       }
 
       if (strcmp(unit_, "1") == 0)
       {
-         dec_places = 1;
+         flags |= FLAGS_ONE_DEC_PLACE;
          unit_ = "";
       }
 
@@ -103,14 +113,13 @@ public:
                                          : " ";
 
             print_val = abs(value);
-
          }
          else
          {
             print_val = unsigned(value);
          }
 
-         if (dec_places == 1)
+         if (flags & FLAGS_ONE_DEC_PLACE)
          {
              unsigned units = print_val / 10;
              unsigned frac  = print_val % 10;
@@ -129,6 +138,16 @@ public:
          case UINT16: *(uint16_t*)patch = uint16_t(value); break;
          case INT32:  *(int32_t*)patch  = int32_t(value); break;
          case UINT32: *(uint32_t*)patch = uint32_t(value); break;
+
+         case UINT8_FIELD:
+            {
+               unsigned width = (flags >> 3) & 0b111;
+               unsigned lsb   = flags & 0b111;
+
+               PatchRef(*(uint8_t*)patch, width, lsb) = value;
+            }
+            break;
+
          default: break;
          }
       }
@@ -146,11 +165,14 @@ private:
       UINT16,
       INT32,
       UINT32,
-      FLOAT32
+      FLOAT32,
+      UINT8_FIELD
    };
 
+   static const uint8_t FLAGS_ONE_DEC_PLACE = 1 << 7;
+
    Type    type{NONE};
-   uint8_t dec_places{0};
+   uint8_t flags{0};
    uint8_t midi1{};
    uint8_t midi2{};
 

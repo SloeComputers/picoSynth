@@ -44,7 +44,9 @@ public:
                                            "WAVE 8 Electro-2",
                                            "WAVE 9 Electro-3"};
 
-      static const char* octave_enum[3] = {"OCTAVE LOW", "OCTAVE MIDDLE", "OCTAVE HIGH"};
+      static const char* octave_enum[3] = {"OCTAVE LOW",
+                                           "OCTAVE MIDDLE",
+                                           "OCTAVE HIGH"};
 
       // Notes below map neatly to AKAI MIDImix mute/rec buttons
       addBtn(1, 3, 9, wave_enum,   patch.wave);

@@ -31,8 +31,6 @@ public:
       addCtrl<uint8_t>(27, 6, 0, 99, "DCO SUB",   "1", patch.sub_osc_level);
       addCtrl<uint8_t>(31, 7, 0, 99, "DCO NOISE", "1", patch.noise_level);
 
-      //addCtrl<uint8_t>(18, 0, 0,  3, "HPF",       "1", patch.hpf);
-
       addCtrl<uint8_t>(22, 8, 0, 99, "VCF FREQ",  "1", patch.vcf_freq);
       addCtrl<uint8_t>(26, 9, 0, 99, "VCF RES",   "1", patch.vcf_res);
       addCtrl<uint8_t>(30, 0, 0, 99, "VCF ENV",   "1", patch.vcf_env);
@@ -45,6 +43,29 @@ public:
       addCtrl<uint8_t>(53, 0, 0, 99, "ENV D",     "1", patch.env_decay);
       addCtrl<uint8_t>(57, 0, 0, 99, "ENV S",     "1", patch.env_sustain);
       addCtrl<uint8_t>(61, 0, 0, 99, "ENV R",     "1", patch.env_release);
+
+         // case 0b001: patch.range = edit("DCO RANGE 4'",  0b100); break;
+         // case 0b100: patch.range = edit("DCO RANGE 8'",  0b010); break;
+         // case 0b010: patch.range = edit("DCO RANGE 16'", 0b001); break;
+
+      static const char* range_enum[]   = {"RANGE 4'", "RANGE 8'", "RANGE 16'"};
+      static const char* chorus_enum[]  = {"CHORUS OFF", "CHORUS I", "CHORUS II"};
+      static const char* pwm_enum[]     = {"PWM OFF", "PWM ON"};
+      static const char* saw_enum[]     = {"SAW OFF", "SAW ON"};
+      static const char* dco_pwm_enum[] = {"PWM LFO", "PWM MAN"};
+      static const char* vca_enum[]     = {"VCA ENV", "VCA GATE"};
+      static const char* vcf_enum[]     = {"VCF +VE", "VCF -VE"};
+
+      addBtn( 1, 1, 2, range_enum,   patch.btns1, 3, 0);
+      addTgl( 7,       pwm_enum,     patch.btns1, 3);
+      addTgl(10,       saw_enum,     patch.btns1, 4);
+      addBtn( 9, 9, 2, chorus_enum,  patch.btns1, 2, 5);
+
+      addTgl( 4,       dco_pwm_enum, patch.btns2, 0);
+      addTgl( 3,       vca_enum,     patch.btns2, 1);
+      addTgl( 6,       vcf_enum,     patch.btns2, 2);
+
+      addCtrl<uint8_t>(18, 0, 0,  3, "HPF",       "", patch.btns2, 2, 3);
    }
 
 private:
@@ -64,80 +85,9 @@ private:
       setText(1, name_);
    }
 
-   uint8_t edit(const char* text_, uint8_t value_)
-   {
-      setText(1, text_);
-      return value_;
-   }
-
-   uint8_t editNum(const char* name_, uint8_t value_)
-   {
-      char text[17];
-      snprintf(text, sizeof(text), "%s %u", name_, value_);
-      return edit(text, value_);
-   }
-
-   unsigned editBool(const char* name_,
-                     const char* text_true_,
-                     const char* text_false_,
-                     unsigned    value_)
-   {
-      char text[17];
-      snprintf(text, sizeof(text), "%s %s", name_, value_ ? text_true_ : text_false_);
-      setText(1, text);
-      return value_;
-   }
-
-   //! Override to intercept bottom notes as buttons
-   bool synthFilterNote(uint8_t midi_note_) override
-   {
-      // Notes below map neatly to AKAI MIDImix mute and rec/arm button
-      switch(midi_note_)
-      {
-      case  1:
-         switch(patch.range)
-         {
-         case 0b001: patch.range = edit("DCO RANGE 4'",  0b100); break;
-         case 0b100: patch.range = edit("DCO RANGE 8'",  0b010); break;
-         case 0b010: patch.range = edit("DCO RANGE 16'", 0b001); break;
-         }
-         break;
-
-      case  4: patch.dco_pwm_man  = editBool("DCO PWM", "MAN",  "LFO", patch.dco_pwm_man ^ 1); break;
-      case  7: patch.pwm          = editBool("DCO PWM", "ON",   "OFF", patch.pwm         ^ 1); break;
-      case 10: patch.saw          = editBool("DCO SAW", "ON",   "OFF", patch.saw         ^ 1); break;
-
-      case  3: patch.vcf_neg      = editBool("VCF ENV", "-VE",  "+VE", patch.vcf_neg     ^ 1); break;
-      case  6: patch.vca_gate     = editBool("VCA",     "GATE", "ENV", patch.vca_gate    ^ 1); break;
-      case  9: patch.chorus_off   = editBool("CHORUS",  "OFF",  "ON",  patch.chorus_off  ^ 1); break;
-
-      case 12:
-         patch.chorus_1   = editBool("CHORUS",  "I",    "II",  patch.chorus_1    ^ 1);
-         patch.chorus_off = 0;
-         break;
-
-      default:
-         return ::Synth::synthFilterNote(midi_note_);
-      }
-
-      programVoices(&patch);
-      return true;
-   }
-
    void synthEdit() override
    {
       programVoices(&patch);
-   }
-
-   void synthControl(uint8_t control_, uint8_t value_) override
-   {
-      switch(control_)
-      {
-      case 18: patch.hpf = editNum("HPF", (value_ >> 5)) ^ 0b11; programVoices(&patch); return;
-      default: break;
-      }
-
-      ::Synth::synthControl(control_, value_);
    }
 
    void synthProgram(uint8_t num_) override
