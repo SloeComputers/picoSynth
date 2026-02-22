@@ -32,7 +32,7 @@ inline constexpr unsigned BTM4 = 30;
 inline constexpr unsigned LVL4 = 31;
 
 inline constexpr unsigned TOP5 = 46;
-inline constexpr unsigned MID5 = 17;
+inline constexpr unsigned MID5 = 47;
 inline constexpr unsigned BTM5 = 48;
 inline constexpr unsigned LVL5 = 49;
 

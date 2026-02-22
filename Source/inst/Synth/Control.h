@@ -15,6 +15,8 @@
 class Control
 {
 public:
+   struct Enum { int8_t value; const char* txt; };
+
    Control() = default;
 
    template <typename TYPE>
@@ -24,6 +26,7 @@ public:
              TYPE        max_,
              const char* name_,
              const char* unit_,
+             const Enum* enum_,
              TYPE&       patch_,
              unsigned    width_ = 0,
              unsigned    lsb_   = 0)
@@ -66,6 +69,7 @@ public:
       midi2 = midi2_;
       name  = name_;
       unit  = unit_;
+      enm   = enum_;
       patch = &patch_;
    }
 
@@ -102,32 +106,44 @@ public:
       }
       else
       {
-         signed      value     = i.min + value_ * (i.max - i.min) / 127;
-         const char* sign      = "";
-         unsigned    print_val = 0;
+         signed value;
 
-         if (i.min < 0)
+         if (enm != nullptr)
          {
-            sign = value < 0 ? "-"
-                             : value > 0 ? "+"
-                                         : " ";
-
-            print_val = abs(value);
+            unsigned index = (value_ * i.max + 64) / 128;
+            snprintf(text_, text_len_, "%s %s", name, enm[index].txt);
+            value = enm[index].value;
          }
          else
          {
-            print_val = unsigned(value);
-         }
+            value = i.min + (value_ * (i.max - i.min) + 64) / 128;
 
-         if (flags & FLAGS_ONE_DEC_PLACE)
-         {
-             unsigned units = print_val / 10;
-             unsigned frac  = print_val % 10;
-             snprintf(text_, text_len_, "%s %s%u.%u %s", name, sign, units, frac, unit);
-         }
-         else
-         {
-             snprintf(text_, text_len_, "%s %s%u %s", name, sign, print_val, unit);
+            const char* sign      = "";
+            unsigned    print_val = 0;
+
+            if (i.min < 0)
+            {
+               sign = value < 0 ? "-"
+                                : value > 0 ? "+"
+                                            : " ";
+
+               print_val = abs(value);
+            }
+            else
+            {
+               print_val = unsigned(value);
+            }
+
+            if (flags & FLAGS_ONE_DEC_PLACE)
+            {
+                unsigned units = print_val / 10;
+                unsigned frac  = print_val % 10;
+                snprintf(text_, text_len_, "%s %s%u.%u %s", name, sign, units, frac, unit);
+            }
+            else
+            {
+                snprintf(text_, text_len_, "%s %s%u %s", name, sign, print_val, unit);
+            }
          }
 
          switch(type)
@@ -195,6 +211,7 @@ private:
 
    const char* name{};
    const char* unit{""};
+   const Enum* enm{nullptr};
    void*       patch{};
 };
 

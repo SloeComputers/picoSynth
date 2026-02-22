@@ -33,8 +33,8 @@ public:
       switch(index)
       {
       case 0: synth = &tb_303;       break;
-      case 1: synth = &juno_106;     break;
-      case 2: synth = &sh_101;       break;
+      case 1: synth = &sh_101;       break;
+      case 2: synth = &juno_106;     break;
       case 3: synth = &vl1;          break;
       case 4: synth = &physm;        break;
       case 5: synth = &acorn_proton; break;

@@ -4,6 +4,8 @@ Retro synth.
 
 ## Status
 
+Early development. Many unfinished things some of them barely started.
+
 ## Hardware
 
 Re-uses the [picoX7](https://github.com/AnotherJohnH/picoX7) hardware platform. See [README](https://github.com/AnotherJohnH/Hardware/blob/main/picoX7/README.md)

@@ -9,10 +9,12 @@ namespace SH_101 {
 
 struct Control
 {
-   float tuning{0.0};
-   float volume{0.0};
-   float hpf_freq{80.0};
-   float hpf_q{1.20};
+   float tune{};
+   float volume{};
+   float portamento{};
+   float bend_vco{};
+   float bend_vcf{};
+   float lfo_mod{};
 };
 
 } // namespace SH_101

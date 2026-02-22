@@ -139,7 +139,23 @@ protected:
    {
       Control& ctrl = control[num_control++];
 
-      ctrl.init<TYPE>(midi1_, midi2_, min_, max_, name_, unit_, patch_, width_, lsb_);
+      ctrl.init<TYPE>(midi1_, midi2_, min_, max_, name_, unit_, nullptr, patch_, width_, lsb_);
+   }
+
+   //! Add a MIDI variable control
+   template <typename TYPE>
+   void addCtrl(uint8_t              midi1_,
+                uint8_t              midi2_,
+                unsigned             n_,
+                const Control::Enum* enum_,
+                const char*          name_,
+                TYPE&                patch_,
+                unsigned             width_ = 0,
+                unsigned             lsb_   = 0)
+   {
+      Control& ctrl = control[num_control++];
+
+      ctrl.init<TYPE>(midi1_, midi2_, 0, n_ - 1, name_, "", enum_, patch_, width_, lsb_);
    }
 
    //! Add a MIDI note button control
