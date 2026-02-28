@@ -20,12 +20,12 @@ public:
    {
       vca_env.setAttack_mS(0);
       vca_env.setDecay_mS(8000.0);
-      vca_env.setSustain(0);
+      vca_env.setSustain(uint8_t(0));
       vca_env.setSustain_mS(0);
       vca_env.setRelease_mS(5.0);
 
       vcf_env.setAttack_mS(0);
-      vcf_env.setSustain(0);
+      vcf_env.setSustain(uint8_t(0));
       vcf_env.setSustain_mS(0);
       vcf_env.setRelease_mS(5.0);
    }

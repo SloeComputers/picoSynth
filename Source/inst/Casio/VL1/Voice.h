@@ -23,7 +23,7 @@ public:
       lpf.setFreq(1000);
 
       perc_env.setAttack_mS(0);
-      perc_env.setSustain(0);
+      perc_env.setSustain(uint8_t(0));
       perc_env.setRelease_mS(0);
 
       octave_osc.setFreq(4);
@@ -85,7 +85,7 @@ public:
 
       env.setAttack_mS(5 + patch_->attack_time * 50);
       env.setDecay_mS(patch_->decay_time * 800);
-      env.setSustain(patch_->sustain_level * 127 / 9);
+      env.setSustain(uint8_t(patch_->sustain_level * 127 / 9));
       env.setSustain_mS(patch_->sustain_time * 250);
       env.setRelease_mS(patch_->release_time * 250);
 

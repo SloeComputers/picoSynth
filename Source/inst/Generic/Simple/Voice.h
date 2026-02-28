@@ -19,7 +19,7 @@ public:
    {
       env.setAttack_mS(0);
       env.setDecay_mS(100000.0);
-      env.setSustain(0);
+      env.setSustain(uint8_t(0));
       env.setSustain_mS(0);
       env.setRelease_mS(10.0);
 
