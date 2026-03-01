@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 inline constexpr unsigned NONE = 128;
 
 namespace Akai {
@@ -53,6 +55,8 @@ inline constexpr unsigned LVL8 = 61;
 
 inline constexpr unsigned MASTER  = 62;
 
+extern const uint8_t map[38];
+
 } // MIDImix
 
 namespace MPKmini {
@@ -65,6 +69,8 @@ inline constexpr unsigned K5 = 6;
 inline constexpr unsigned K6 = 7;
 inline constexpr unsigned K7 = 8;
 inline constexpr unsigned K8 = 9;
+
+extern const uint8_t map[10];
 
 } // MPKmini
 

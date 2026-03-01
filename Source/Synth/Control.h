@@ -171,6 +171,19 @@ public:
       return true;
    }
 
+   void print()
+   {
+      if (midi2 != 128)
+         printf("%3u, %3u : %s\n", midi1, midi2, name);
+      else
+         printf("%3u      : %s\n", midi1, name);
+   }
+
+   const char* checkLabel(uint8_t midi, unsigned n) const
+   {
+      return midi == (n == 1 ? midi1 : midi2) ? name : nullptr;
+   }
+
 private:
    enum Type : uint8_t
    {

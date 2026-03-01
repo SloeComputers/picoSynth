@@ -22,6 +22,8 @@ public:
    Synth()
       : SynthVoiceSysEx(MIDI_MANUF_ID)
    {
+      configure("JUNO-106");
+
       // Controls below map neatly to AKAI MIDImix rotary and slider knobs
       addCtrl<uint8_t>(16, 2, 0, 99, "LFO RATE",  "1", patch.lfo_rate);
       addCtrl<uint8_t>(20, 3, 0, 99, "LFO DELAY", "1", patch.lfo_delay);
@@ -69,11 +71,6 @@ public:
    }
 
 private:
-   void synthInit() override
-   {
-      setText(0, "    JUNO-106    ");
-   }
-
    static const uint8_t MIDI_MANUF_ID = 0x41; //!< Roland
 
    void setPatch(const uint8_t* raw_, const char* name_)

@@ -16,10 +16,7 @@
 class SynthRack
 {
 public:
-   SynthRack()
-   {
-      select(0);
-   }
+   SynthRack() = default;
 
    Synth* get() const { return synth; }
 

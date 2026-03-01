@@ -13,7 +13,7 @@
 
 #include "SIG/SIG.h"
 
-#include "inst/SynthRack.h"
+#include "SynthRack.h"
 
 // -----------------------------------------------------------------------------
 
@@ -133,6 +133,8 @@ int main()
 
    usb.setDebug(MIDI_DEBUG);
    phys_midi.setDebug(MIDI_DEBUG);
+
+   rack.select(0);
 
    initSynth();
 

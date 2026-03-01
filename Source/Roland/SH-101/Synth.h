@@ -23,6 +23,8 @@ class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip
 public:
    Synth()
    {
+      configure("SH-101");
+
       // LFO
       static const ::Control::Enum enm_lfo_wave[4] =
          {{LFO_TRI, "TRI"}, {LFO_SQR, "SQR"}, {LFO_RAND, "RAND"}, {LFO_NOISE, "NOISE"}};
@@ -77,23 +79,18 @@ public:
       // CONTROL
       addCtrl<float>(  MX::BTM2, NONE,      -5.0f,  +5.0f, "TUNE       ",  "", control.tune);
       addCtrl<float>(  MX::MASTER, MK::K8, -60.0f, +20.0f, "VOLUME", "dB",   control.volume);
-      addCtrl<float>(  MX::TOP3, NONE,       0.0f, +9.99f, "PORTMENTO  ",  "", control.portamento);
-      addCtrl<float>(  MX::TOP4, NONE,       0.0f, +9.99f, "BEND VCO   ",  "", control.bend_vco);
-      addCtrl<float>(  MX::TOP5, NONE,       0.0f, +9.99f, "BEND VCF   ",  "", control.bend_vcf);
-      addCtrl<float>(  MX::TOP6, NONE,       0.0f, +9.99f, "LFO MOD    ",   "", control.lfo_mod);
+      addCtrl<float>(  MX::TOP5, NONE,       0.0f, +9.99f, "PORTMENTO  ",  "", control.portamento);
+      addCtrl<float>(  MX::TOP6, NONE,       0.0f, +9.99f, "BEND VCO   ",  "", control.bend_vco);
+      addCtrl<float>(  MX::TOP7, NONE,       0.0f, +9.99f, "BEND VCF   ",  "", control.bend_vcf);
+      addCtrl<float>(  MX::TOP8, NONE,       0.0f, +9.99f, "LFO MOD    ",   "", control.lfo_mod);
 
       // Model tuning and debug
-      addCtrl<float>(MX::MID1, NONE, 0.0f, +1.0f,  "int tune 1 ", "", control.tune1);
-      addCtrl<float>(MX::MID2, NONE, 0.0f, +1.0f,  "int tune 2 ", "", control.tune2);
-      addCtrl<float>(MX::MID3, NONE, 0.0f, +1.0f,  "int tune 3 ", "", control.tune3);
+      addCtrl<float>(MX::MID1, NONE, 0.0f, +1.0f,  "int 1      ", "", control.tune1);
+      addCtrl<float>(MX::MID2, NONE, 0.0f, +1.0f,  "int 2      ", "", control.tune2);
+      addCtrl<float>(MX::MID3, NONE, 0.0f, +1.0f,  "int 3      ", "", control.tune3);
    }
 
 private:
-   void synthInit() override
-   {
-      setText(0, "     SH-101     ");
-   }
-
    void synthEdit() override
    {
       programVoices(&patch);

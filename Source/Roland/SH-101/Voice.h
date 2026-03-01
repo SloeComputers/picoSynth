@@ -29,7 +29,7 @@ public:
    {
       // LFO
       lfo_wave = patch_->lfo_wave;
-      float lfo_freq = 35.0f * powf(2.0f, 255.0f * (patch_->lfo_rate * 0.1f - 1.0f) / 21.0f);
+      float lfo_freq = 30.0f * powf(2.0f, 7.813f * (patch_->lfo_rate * 0.1f - 1.0f));
       lfo_triangle.setFreq(lfo_freq);
       lfo_square.setFreq(lfo_freq);
       lfo_random.setFreq(lfo_freq);
@@ -53,8 +53,6 @@ public:
       case SUB_2OP: vco_sub_octave = -2; vco_sub.setWidth(-0.5f); break;
       }
 
-      updateFreq();
-
       // VCF
       vcf.setFreq(16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f));
       vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
@@ -64,8 +62,8 @@ public:
 
       // ENV
       env_mode = patch_->env_mode;
-      env.setAttack_mS(unsigned(patch_->env_a* 400));
-      env.setDecay_mS(unsigned(patch_->env_d* 1000));
+      env.setAttack_mS(unsigned(patch_->env_a * 400));
+      env.setDecay_mS(unsigned(patch_->env_d * 1000));
       env.setSustain(patch_->env_s * 0.1f);
       env.setRelease_mS(unsigned(patch_->env_r * 1000));
 
@@ -80,9 +78,7 @@ public:
 
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
-      note = note_;
-
-      updateFreq();
+      cv = (note_ / 12.0f) + vco_octave;
 
       lfo_triangle.sync();
       lfo_square.sync();
@@ -129,11 +125,15 @@ public:
       }
       vco_rect.setWidth(pwm_out * 0.91);
 
-      SIG::Signal pitch_mod = vco_mod * lfo_out;
+      SIG::Signal vco_cv = cv + vco_mod * lfo_out;
 
-      SIG::Signal source_mix = vco_rect(pitch_mod) +
-                               vco_ramp(pitch_mod) +
-                               vco_sub(pitch_mod) +
+      vco_rect.setCV(vco_cv);
+      vco_ramp.setCV(vco_cv);
+      vco_sub.setCV(vco_cv + vco_sub_octave);
+
+      SIG::Signal source_mix = vco_rect() +
+                               vco_ramp() +
+                               vco_sub() +
                                noise_mix(noise_out);
 
       SIG::Signal vcf_mod = vcf_lfo_mod * lfo_out +
@@ -148,24 +148,14 @@ public:
    }
 
 private:
-   void updateFreq()
-   {
-      unsigned eff_note = note + vco_octave * 12;
-
-      cv = eff_note / 12.0f - 5.0f;
-
-      vco_rect.setNote(eff_note);
-      vco_ramp.setNote(eff_note);
-      vco_sub.setNote(eff_note + vco_sub_octave * 12);
-   }
-
    const SIG::LogPot log_pot{/* max x */ 9.99f, /* break point y */ 0.2f};
-
-   SIG::Osc::Noise      noise{};
-   SIG::Filter::BiQuad  noise_filter{SIG::Filter::LOPASS};
 
    SIG::Float gate{};
    SIG::Float cv{};
+
+   // Noise generator
+   SIG::Osc::Noise     noise{};
+   SIG::Filter::BiQuad noise_filter{SIG::Filter::LOPASS};
 
    // LFO
    LfoWave            lfo_wave{};
@@ -177,9 +167,8 @@ private:
    SIG::Float      vco_mod;
    VcoPwm          vco_pwm_src;
    SIG::Float      pwm_level;
-   uint8_t         note;              // Currently playing MIDI note
    unsigned        vco_octave{};
-   unsigned        vco_sub_octave{};
+   SIG::Float      vco_sub_octave{};
    SIG::Osc::Pwm   vco_rect{};
    SIG::Osc::Ramp  vco_ramp{};
    SIG::Osc::Pwm   vco_sub{};

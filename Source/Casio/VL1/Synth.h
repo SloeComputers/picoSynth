@@ -19,6 +19,8 @@ class Synth : public ::SynthVoice<Effect, Voice, /* NUM_VOICES */ 8>
 public:
    Synth()
    {
+      configure("CASIO VL-1");
+
       // Controls below map neatly to AKAI MIDImix and MPKmini
       addCtrl<uint8_t>(19, 2, 0, 9, "ATTACK",        "", patch.attack_time);
       addCtrl<uint8_t>(23, 3, 0, 9, "DECAY",         "", patch.decay_time);
@@ -56,8 +58,6 @@ public:
 private:
    void synthInit() override
    {
-      setText(0, "   CASIO VL-1   ");
-
       control.init();
 
       initVoices();

@@ -22,6 +22,8 @@ class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip
 public:
    Synth()
    {
+      configure("Phys-Model");
+
       addCtrl<float>(MX::LVL1,   MK::K1,   1.0,     10.0, "Exc Frq",  "Hz", patch.exciter_freq);
       addCtrl<float>(MX::LVL2,   MK::K2,  -0.999,   -0.9, "Exc Len",  "",   patch.exciter_length);
       addCtrl<float>(MX::LVL3,   MK::K3, 100.0,  10000.0, "Exc Cut",  "Hz", patch.exciter_cutoff);
@@ -32,11 +34,6 @@ public:
    }
 
 private:
-   void synthInit() override
-   {
-      setText(0, "   Phys-Model   ");
-   }
-
    void synthProgram(uint8_t num_) override
    {
       programVoices(&patch);

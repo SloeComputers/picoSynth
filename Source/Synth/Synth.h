@@ -7,11 +7,15 @@
 
 #include "STB/MIDIInstrument.h"
 
+#include "MidiController.h"
+#include "MidiMap.h"
 #include "Control.h"
 #include "NoteButton.h"
 
 //! Synth external interface
-class Synth : public MIDI::Instrument
+class Synth
+   : public MIDI::Instrument
+   , public MidiMap::ControlMap
 {
 public:
    Synth(unsigned num_voices_)
@@ -21,12 +25,17 @@ public:
 
    void init()
    {
-      setNumber(188);
+      setNumber(0);
 
-      setText(0, "");
+      char title[17];
+      MidiMap::centerText(title, 16, name);
+
+      setText(0, title);
       setText(1, "");
 
       synthInit();
+
+      dumpControls();
 
       for(unsigned i = 0; i < num_voices; ++i)
       {
@@ -80,7 +89,7 @@ protected:
       for(unsigned i = 0; i < num_control; ++i)
       {
          const Control& ctrl = control[i];
-         char            text[17];
+         char           text[17];
 
          if (ctrl.edit(midi_control_, value_, text, sizeof(text)))
          {
@@ -123,6 +132,11 @@ protected:
          return;
 
       synthControl(control_, value_);
+   }
+
+   void configure(const char* name_)
+   {
+      name = name_;
    }
 
    //! Add a MIDI variable control
@@ -205,10 +219,33 @@ protected:
    }
 
 private:
+   const char* findControl(uint8_t midi, unsigned n) const override
+   {
+      for(unsigned i = 0; i < num_control; ++i)
+      {
+         const char* label = control[i].checkLabel(midi, n);
+         if (label != nullptr)
+            return label;
+      }
+
+      return nullptr;
+   }
+
+   void dumpControls()
+   {
+      printf("\n--------------------------------------------------------------------------------\n");
+      printf("%s\n\n", name);
+
+      MidiMap::print("Akai MIDImix", Akai::MIDImix::map, this, 1);
+      MidiMap::print("Akai MPKmini", Akai::MPKmini::map, this, 2);
+   }
+
    static const unsigned MAX_TEXT_LEN   = 16;
    static const unsigned MAX_TEXT_LINES = 2;
    static const unsigned MAX_CONTROL    = 33;
    static const unsigned MAX_BUTTON     = 12;
+
+   const char* name{""};
 
    char text[MAX_TEXT_LINES][MAX_TEXT_LEN + 1];
    bool text_update[MAX_TEXT_LINES] = {};

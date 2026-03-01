@@ -23,6 +23,8 @@ class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip
 public:
    Synth()
    {
+      configure("TB-303");
+
       static const ::Control::Enum enm_wave[2] =
          {{RAMP, "RAMP"}, {SQUARE, "SQUARE"}};
 
@@ -45,11 +47,6 @@ public:
    }
 
 private:
-   void synthInit() override
-   {
-      setText(0, "     TB-303     ");
-   }
-
    void synthEdit() override
    {
       programVoices(&patch);
