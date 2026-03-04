@@ -98,8 +98,8 @@ public:
 private:
    void synthEdit() override
    {
-      programVoices(&patch);
       programVoices(&control);
+      programVoices(&patch);
    }
 
    void synthProgram(uint8_t num_) override

@@ -22,9 +22,9 @@ struct Control
    float     lfo_mod{};
 
    // Model tuning controls
-   float tune1;
-   float tune2;
-   float tune3;
+   float tune1{};
+   float tune2{};
+   float tune3{};
 };
 
 } // namespace SH_101

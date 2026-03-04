@@ -54,12 +54,11 @@ public:
       }
 
       // VCF
-      vcf_man = 16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f);
+      vcf_man = 1.0f + patch_->vcf_freq;
 
-      vcf.setFreq(16000.0f * powf(2.0f, 255.0f * (patch_->vcf_freq * 0.1f - 1.0f) / 21.0f));
       vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
-      vcf_env_mod = patch_->vcf_env  * 0.1f;
-      vcf_lfo_mod = patch_->vcf_mod  * 0.1f;
+      vcf_env_mod = patch_->vcf_env;
+      vcf_lfo_mod = patch_->vcf_mod;
       vcf_kbd_mod = patch_->vcf_kybd * 0.1f;
 
       // ENV
@@ -85,6 +84,10 @@ public:
       case PORTA_AUTO: portamento.setTimeConst(control_->portamento * 0.1f); break;
       case PORTA_ON:   portamento.setTimeConst(control_->portamento * 0.1f); break;
       }
+
+      tune1 = control_->tune1;
+      tune2 = control_->tune2;
+      tune3 = control_->tune3;
    }
 
    void noteOn(uint8_t note_, uint8_t velocity_)
@@ -153,8 +156,14 @@ public:
                            vcf_lfo_mod * lfo_out +
                            vcf_env_mod * env_out +
                            vcf_kbd_mod * cv;
+      if (vcf_cv < 0.0f)
+         vcf_cv = 0.0f;
+      else if (vcf_cv > 11.0f)
+         vcf_cv = 11.0f;
 
-      (void) vcf_cv;
+      SIG::Signal vcf_freq = 8.18f * powf(2.0f, vcf_cv);
+
+      vcf.setFreq(vcf_freq);
 
       vca = vca_mode == VCA_ENV ? env_out : gate;
 
@@ -207,6 +216,10 @@ private:
 
    // AMP
    SIG::Gain volume{};
+
+   float tune1{};
+   float tune2{};
+   float tune3{};
 };
 
 } // namespace SH_101
