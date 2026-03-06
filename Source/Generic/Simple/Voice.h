@@ -49,6 +49,8 @@ public:
       env.off();
    }
 
+   void noteBend(int16_t bend_) {}
+
    void tick(const NoEffect& effect_, unsigned n_) {}
 
    SIG::Signal sample(const NoEffect& effect_)

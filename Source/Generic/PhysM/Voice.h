@@ -40,6 +40,8 @@ public:
    {
    }
 
+   void noteBend(int16_t bend_) {}
+
    void tick(const NoEffect& effect_, unsigned n_)
    {
    }

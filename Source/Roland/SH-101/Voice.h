@@ -35,7 +35,7 @@ public:
       lfo_wave = patch_->lfo_wave;
 
       // VCO
-      vco_mod     = patch_->vco_mod * 0.1f;
+      vco_mod     = lin_pot(patch_->vco_mod + 0.07f) * vco_width;
       vco_octave  = patch_->vco_range;
       pwm_level   = patch_->vco_pulse_width * 0.1f;
       vco_pwm_src = patch_->vco_pwm_src;
@@ -55,9 +55,9 @@ public:
       // VCF
       vcf_man = 1.0f + patch_->vcf_freq;
       vcf.setQ(0.4f + patch_->vcf_res * 1.5f);
-      vcf_env_mod = patch_->vcf_env;
-      vcf_lfo_mod = patch_->vcf_mod;
-      vcf_kbd_mod = patch_->vcf_kybd * 0.1f;
+      vcf_env     = patch_->vcf_env;
+      vcf_mod     = patch_->vcf_mod * vcf_width;
+      vcf_kbd = patch_->vcf_kybd * 0.1f;
 
       // VCA
       vca_mode = patch_->vca_mode;
@@ -72,7 +72,8 @@ public:
 
    void program(const Control* control_)
    {
-      volume = SIG::dBGainLookup(control_->volume);
+      volume     = SIG::dBGainLookup(control_->volume);
+      modulation = control_->modulation;
 
       portamento.setTimeConst(control_->portamento * 0.1f);
 
@@ -83,6 +84,9 @@ public:
       case PORTA_ON:   portamento.setTimeConst(control_->portamento * 0.1f); break;
       }
 
+      vco_bend_mod = control_->bend_vco;
+      vcf_bend_mod = control_->bend_vcf;
+
       tune1 = control_->tune1;
       tune2 = control_->tune2;
       tune3 = control_->tune3;
@@ -91,9 +95,6 @@ public:
    void noteOn(uint8_t note_, uint8_t velocity_)
    {
       portamento = note_ / 12.0f;
-
-      lfo_triangle.sync();
-      lfo_square.sync();
 
       vco_rect.sync();
       vco_ramp.setPhase(SIG::UPHASE_HALF);
@@ -109,6 +110,14 @@ public:
       gate = 0.0;
       if (env_mode != ENV_LFO)
          env.off();
+   }
+
+   void noteBend(int16_t bend_)
+   {
+      SIG::Float bend = SIG::Float(bend_) / 8192.0f;
+
+      vco_bend = vco_bend_mod * bend;
+      vcf_bend = vcf_bend_mod * bend;
    }
 
    void tick(const NoEffect& effect_, unsigned n_) {}
@@ -139,7 +148,9 @@ public:
 
       SIG::Float cv = portamento();
 
-      SIG::Signal vco_cv = cv + vco_mod * lfo_out + vco_octave;
+      SIG::Signal vco_cv = cv + vco_octave +
+                           vco_mod * lfo_out +
+                           vco_bend;
 
       vco_rect.setCV(vco_cv);
       vco_ramp.setCV(vco_cv);
@@ -151,9 +162,10 @@ public:
                                noise_mix(noise_out);
 
       SIG::Signal vcf_cv = vcf_man +
-                           vcf_lfo_mod * lfo_out +
-                           vcf_env_mod * env_out +
-                           vcf_kbd_mod * cv;
+                           vcf_mod * lfo_out +
+                           vcf_env * env_out +
+                           vcf_kbd * cv +
+                           vcf_bend;
       if (vcf_cv < 0.0f)
          vcf_cv = 0.0f;
       else if (vcf_cv > 11.0f)
@@ -171,9 +183,16 @@ public:
 private:
    const SIG::Gain   lin_pot{0.1f};
    const SIG::LogPot log_pot{/* max x */ 9.99f, /* break point y */ 0.2f};
+   const SIG::Float  vco_width{2.2f};
+   const SIG::Float  vcf_width{3.0f};
 
+   SIG::Float   modulation{};
    SIG::Float   gate{};
    SIG::ExpSlew portamento{0.0f};
+   SIG::Float   vco_bend_mod{};
+   SIG::Float   vcf_bend_mod{};
+   SIG::Float   vco_bend{};
+   SIG::Float   vcf_bend{};
 
    // Noise generator
    SIG::Osc::Noise     noise{};
@@ -189,7 +208,7 @@ private:
    SIG::Float      vco_mod;
    VcoPwm          vco_pwm_src;
    SIG::Float      pwm_level;
-   unsigned        vco_octave{};
+   signed          vco_octave{};
    SIG::Float      vco_sub_octave{};
    SIG::Osc::Pwm   vco_rect{};
    SIG::Osc::Ramp  vco_ramp{};
@@ -200,9 +219,9 @@ private:
 
    // VCF
    SIG::Signal         vcf_man;
-   SIG::Signal         vcf_lfo_mod;
-   SIG::Signal         vcf_env_mod;
-   SIG::Signal         vcf_kbd_mod;
+   SIG::Signal         vcf_mod;
+   SIG::Signal         vcf_env;
+   SIG::Signal         vcf_kbd;
    SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
 
    // VCA

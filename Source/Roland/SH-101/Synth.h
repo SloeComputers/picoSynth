@@ -13,6 +13,8 @@
 #include "Patch.h"
 #include "Control.h"
 
+#define CLOUD // closer match with Roland Cloud
+
 namespace MX = Akai::MIDImix;
 namespace MK = Akai::MPKmini;
 
@@ -26,22 +28,42 @@ public:
       configure("SH-101");
 
       // LFO
+#if defined(CLOUD)
+      static const ::Control::Enum enm_lfo_wave[6] =
+         {{LFO_TRI, "tri"}, {LFO_TRI, "TRI"}, {LFO_TRI, "tri"}, {LFO_SQR, "SQR"}, {LFO_RAND, "RAND"}, {LFO_NOISE, "NOISE"}};
+
+      addCtrl<LfoWave>(MX::TOP1, NONE, 6, enm_lfo_wave,"LFO WAVE  ",      patch.lfo_wave);
+#else
       static const ::Control::Enum enm_lfo_wave[4] =
          {{LFO_TRI, "TRI"}, {LFO_SQR, "SQR"}, {LFO_RAND, "RAND"}, {LFO_NOISE, "NOISE"}};
 
       addCtrl<LfoWave>(MX::TOP1, NONE, 4, enm_lfo_wave,"LFO WAVE  ",      patch.lfo_wave);
+#endif
+
       addCtrl<float>(  MX::TOP2, MK::K5, 0.0f, +9.99f, "LFO RATE   ", "", patch.lfo_rate);
 
       // VCO
+#if defined(CLOUD)
       static const ::Control::Enum enm_vco_range[6] =
          {{-1, "64'"}, {0, "32'"}, {1, "16'"}, {2, "8' "}, {3, "4' "}, {4, "2' "}};
+      static const ::Control::Enum enm_vco_pwm_src[4] =
+         {{PWM_MAN, "MAN"}, {PWM_LFO, "LFO"}, {PWM_ENV, "env"}, {PWM_ENV, "ENV"}};
+
+      addCtrl<float>(  MX::LVL1, MK::K6, -9.99f, +9.99f,   "VCO MOD   ",    "", patch.vco_mod);
+      addCtrl<int8_t>( MX::BTM1, NONE, 6, enm_vco_range,   "VCO RANGE   ",      patch.vco_range);
+      addCtrl<float>(  MX::LVL2, MK::K7, 0.0f, +9.99f,     "VCO P.WIDTH",   "", patch.vco_pulse_width);
+      addCtrl<VcoPwm>( MX::LVL3, NONE, 4, enm_vco_pwm_src, "VCO PWM SRC ",      patch.vco_pwm_src);
+#else
+      static const ::Control::Enum enm_vco_range[6] =
+         {{0, "32'"}, {1, "16'"}, {2, "8' "}, {3, "4' "}, {4, "2' "}};
       static const ::Control::Enum enm_vco_pwm_src[3] =
          {{PWM_MAN, "MAN"}, {PWM_LFO, "LFO"}, {PWM_ENV, "ENV"}};
 
       addCtrl<float>(  MX::LVL1, MK::K6, 0.0f, +9.99f,     "VCO MOD    ",   "", patch.vco_mod);
-      addCtrl<int8_t>( MX::BTM1, NONE, 6, enm_vco_range,   "VCO RANGE   ",      patch.vco_range);
+      addCtrl<int8_t>( MX::BTM1, NONE, 5, enm_vco_range,   "VCO RANGE   ",      patch.vco_range);
       addCtrl<float>(  MX::LVL2, MK::K7, 0.0f, +9.99f,     "VCO P.WIDTH",   "", patch.vco_pulse_width);
       addCtrl<VcoPwm>( MX::LVL3, NONE, 3, enm_vco_pwm_src, "VCO PWM SRC ",      patch.vco_pwm_src);
+#endif
 
       // SOURCE MIXER
       static const ::Control::Enum enm_sub_mode[3] =
@@ -57,7 +79,12 @@ public:
       addCtrl<float>(  MX::MID4, NONE,   0.0f, +9.99f, "VCF FREQ   ", "", patch.vcf_freq);
       addCtrl<float>(  MX::MID5, NONE,   0.0f, +9.99f, "VCF RES    ", "", patch.vcf_res);
       addCtrl<float>(  MX::MID6, NONE,   0.0f, +9.99f, "VCF ENV    ", "", patch.vcf_env);
+#if defined(CLOUD)
+      addCtrl<float>(  MX::MID7, NONE,  -9.99f, +9.99f, "VCF MOD   ", "", patch.vcf_mod);
+#else
       addCtrl<float>(  MX::MID7, NONE,   0.0f, +9.99f, "VCF MOD    ", "", patch.vcf_mod);
+#endif
+
       addCtrl<float>(  MX::MID8, NONE,   0.0f, +9.99f, "VCF KYBD   ", "", patch.vcf_kybd);
 
       // ENV
@@ -112,11 +139,6 @@ private:
       setText(1, patch.name);
 
       programVoices(&patch);
-   }
-
-   void voicePitchBend(unsigned index_, int16_t value_) override
-   {
-      control.bend = value_;
    }
 
    Patch   patch{};

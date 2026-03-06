@@ -77,6 +77,10 @@ private:
 
    void voicePitchBend(unsigned index_, int16_t value_) override
    {
+      for(unsigned i = 0; i < NUM_VOICES; ++i)
+      {
+         voice[i].noteBend(value_);
+      }
    }
 
    void voiceOn(unsigned index_, uint8_t midi_note_, uint8_t velocity_) override

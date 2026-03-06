@@ -90,6 +90,8 @@ public:
       gate = 0.0;
    }
 
+   void noteBend(int16_t bend_) {}
+
    void tick(const Effect& effect_, unsigned n_) {}
 
    SIG::Signal sample(const Effect& effect_)

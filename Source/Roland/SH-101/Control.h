@@ -12,7 +12,6 @@ enum PortaMode : uint8_t { PORTA_ON = 0, PORTA_AUTO = 1, PORTA_OFF = 2 };
 struct Control
 {
    PortaMode porta_mode{};
-   float     bend{};
    float     modulation{};
    float     tune{};
    float     volume{};
