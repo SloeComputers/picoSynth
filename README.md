@@ -8,7 +8,7 @@ Early development. Many unfinished things some of them barely started.
 
 ## Hardware
 
-Re-uses the [picoX7](https://github.com/AnotherJohnH/picoX7) hardware platform. See [README](https://github.com/AnotherJohnH/Hardware/blob/main/picoX7/README.md)
+Re-uses the [picoX7](https://github.com/SloeComputers/picoX7) hardware platform. See [README](https://github.com/SloeComputers/Hardware/blob/main/picoX7/README.md)
 
 ## Software
 
@@ -17,15 +17,15 @@ Re-uses the [picoX7](https://github.com/AnotherJohnH/picoX7) hardware platform. 
 This repo uses git sub-modules, so checkout using --recurse to clone all the
 dependent source...
 
-    git clone --recurse-submodules https://github.com/AnotherJohnH/picoSynth.git
+    git clone --recurse-submodules https://github.com/SloeComputers/picoSynth.git
 
 or
 
-    git clone --recurse-submodules ssh://git@github.com/AnotherJohnH/picoSynth.git
+    git clone --recurse-submodules ssh://git@github.com/SloeComputers/picoSynth.git
 
 ### Software dependencies
 
-+ https://github.com/AnotherJohnH/Platform
++ https://github.com/SloeComputers/Platform
 + arm-none-eabi-gcc
 + cmake via UNIX make or auto detection of ninja if installed
 + Python3

@@ -40,7 +40,7 @@ extern "C" void IRQ_IO_BANK0() { buttons.irq(); }
 // --- USB MIDI and FILE -------------------------------------------------------
 
 static hw::FilePortal file_portal{"picoSynth",
-                                  "https://github.com/AnotherJohnH/picoSynth"};
+                                  "https://github.com/SloeComputers/picoSynth"};
 
 static hw::UsbFileMidi usb{0xD157, "picoSynth", file_portal};
 
