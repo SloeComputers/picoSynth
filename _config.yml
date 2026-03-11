@@ -1,3 +1,4 @@
-theme: jekyll-theme-minimal
+theme: jekyll-theme-slate
 title: Sloe Computers home
 description: Project documentation
+exclude: Platform
