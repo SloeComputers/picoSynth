@@ -14,12 +14,12 @@ In 1972 the Roland Corporation was founded by engineer Ikutaro Kakehashi in Osak
 |Jupiter-4|1978|Poly 4|Subtractive|1|1|HP + LP|2|-|
 |SH-7|1978|Mono|Subtractive|2|?|?|?|-|
 |SH-1|1978|Mono|Subtractive|1|1|?|2|-|
-|TB-303|1981|Mono|Subtractive|-|1|HP+LP18|1|-|-|
+|TB-303|1981|Mono|Subtractive|-|1|HP+LP18|1|-|
 |Jupiter-8|1981|Poly 8|Subtractive|1|2|HP+LP12/24|2|-|
-|[SH-101](./SH-101/index.md)|1982|Mono|Subtractive|1|1|LP24|1|-|
-|Juno-60|1982|Poly 6|Subtractive|1|1|LP24|1|-|
+|[SH-101](SH-101)|1982|Mono|Subtractive|1|1|LP24|1|-|
+|[Juno-60]|1982|Poly 6|Subtractive|1|1|LP24|1|-|
 |Jupiter-6|1983|Poly 6|Subtractive|2|2|LP/BP/HP|2|Y|
-|Juno-106|1984|Poly 6|Subtractive|1|1|HP+LP 24|1|Y|
+|[Juno-106](Juno-106)|1984|Poly 6|Subtractive|1|1|HP+LP 24|1|Y|
 |D50|1987|Poly 16|Sample+Subtractive|3PV|2|1|1|Y|
 
 ##  Early drum machines
