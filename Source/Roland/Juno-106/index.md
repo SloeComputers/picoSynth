@@ -1,6 +1,6 @@
-# SH-101
+# Juno-106
 
-[Roland](Roland) 6 voice polyphonic synth with one VCO per voice.
+[Roland](..) 6 voice polyphonic synth with one VCO per voice.
 
 # picoSynth emulation
 
@@ -13,35 +13,35 @@
 ```
 Akai MIDImix map:
 
-   LFO WAV LFO RAT         BEND VC BEND VC LFO MOD PORTA M PORTMEN        
+   LFO RAT LFO DEL VCA MOD VCA LEV CHORUS          PORTA M PORTMEN        
     .--.    .--.    .--.    .--.    .--.    .--.    .--.    .--.          
-   ( 16 )  ( 20 )  (    )  ( 28 )  ( 46 )  ( 50 )  ( 54 )  ( 58 )         
+   ( 16 )  ( 20 )  ( 24 )  ( 28 )  ( 46 )  (    )  ( 54 )  ( 58 )         
     '--'    '--'    '--'    '--'    '--'    '--'    '--'    '--'          
 
-    int 1   int 2   int 3  VCF FRE VCF RES VCF ENV VCF MOD VCF KYB        
+   DCO RAN DCO LFO DCO PWM DCO PWM DCO PWM DCO SAW DCO SUB DCO NOI        
     .--.    .--.    .--.    .--.    .--.    .--.    .--.    .--.          
    ( 17 )  ( 21 )  ( 25 )  ( 29 )  ( 47 )  ( 51 )  ( 55 )  ( 59 )         
     '--'    '--'    '--'    '--'    '--'    '--'    '--'    '--'          
 
-   VCO RAN  TUNE   VCA MOD ENV MOD ENV ATT ENV DEC ENV SUS ENV REL        
+   HPF MOD VCF FRE VCF RES VCF ENV VCF ENV VCF LFO VCF KYB                
     .--.    .--.    .--.    .--.    .--.    .--.    .--.    .--.          
-   ( 18 )  ( 22 )  ( 26 )  ( 30 )  ( 48 )  ( 52 )  ( 56 )  ( 60 )         
+   ( 18 )  ( 22 )  ( 26 )  ( 30 )  ( 48 )  ( 52 )  ( 56 )  (    )         
     '--'    '--'    '--'    '--'    '--'    '--'    '--'    '--'          
 
-   VCO MOD VCO P.W VCO PWM SRC SQU SRC RAM SRC SUB SRC SUB SRC NOI VOLUME 
+   BEND DC BEND VC BEND LF         ENV ATT ENV DEC ENV SUS ENV REL VOLUME 
     .--.    .--.    .--.    .--.    .--.    .--.    .--.    .--.    .--.  
-   ( 19 )  ( 23 )  ( 27 )  ( 31 )  ( 49 )  ( 53 )  ( 57 )  ( 61 )  ( 62 ) 
+   ( 19 )  ( 23 )  ( 27 )  (    )  ( 49 )  ( 53 )  ( 57 )  ( 61 )  ( 62 ) 
     '--'    '--'    '--'    '--'    '--'    '--'    '--'    '--'    '--'  
 
 Akai MPKmini map:
 
-   SRC SQU SRC RAM SRC SUB SRC NOI
+   LFO RAT LFO DEL VCF FRE VCF RES
     .--.    .--.    .--.    .--.  
    (  2 )  (  3 )  (  4 )  (  5 ) 
     '--'    '--'    '--'    '--'  
 
-   LFO RAT VCO MOD VCO P.W VOLUME 
+   ENV ATT ENV DEC ENV SUS ENV REL
     .--.    .--.    .--.    .--.  
    (  6 )  (  7 )  (  8 )  (  9 ) 
-    '--'    '--'    '--'    '--'
+    '--'    '--'    '--'    '--' 
 ```

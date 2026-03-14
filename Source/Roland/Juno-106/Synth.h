@@ -8,11 +8,16 @@
 #include <cstring>
 
 #include "SynthVoiceSysEx.h"
+#include "MidiController.h"
 
 #include "Effect.h"
 #include "Patch.h"
+#include "Control.h"
 #include "Voice.h"
 #include "SysEx.h"
+
+namespace MX = Akai::MIDImix;
+namespace MK = Akai::MPKmini;
 
 namespace Juno106 {
 
@@ -24,50 +29,73 @@ public:
    {
       configure("JUNO-106");
 
-      // Controls below map neatly to AKAI MIDImix rotary and slider knobs
-      addCtrl<uint8_t>(16, 2, 0, 99, "LFO RATE",  "1", patch.lfo_rate);
-      addCtrl<uint8_t>(20, 3, 0, 99, "LFO DELAY", "1", patch.lfo_delay);
+      // LFO
+      addCtrl<uint8_t>(MX::TOP1, MK::K1, 0, 99, "LFO RATE    ", "1", patch.lfo_rate);
+      addCtrl<uint8_t>(MX::TOP2, MK::K2, 0, 99, "LFO DELAY   ", "1", patch.lfo_delay);
 
-      addCtrl<uint8_t>(19, 4, 0, 99, "DCO LFO",   "1", patch.dco_lfo);
-      addCtrl<uint8_t>(23, 5, 0, 99, "DCO PWM",   "1", patch.dco_pwm);
-      addCtrl<uint8_t>(27, 6, 0, 99, "DCO SUB",   "1", patch.sub_osc_level);
-      addCtrl<uint8_t>(31, 7, 0, 99, "DCO NOISE", "1", patch.noise_level);
+      // DCO
+      static const ::Control::Enum enm_dco_range[3] =
+         {{SysEx::RANGE_16, "16'"}, {SysEx::RANGE_8, "8' "}, {SysEx::RANGE_4, "4' "}};
+      static const ::Control::Enum enm_pwm_mode[2] =
+         {{0, "LFO"}, {1, "MAN"}};
+      static const ::Control::Enum enm_off_on[2] =
+         {{0, "OFF"}, {1, "ON"}};
 
-      addCtrl<uint8_t>(22, 8, 0, 99, "VCF FREQ",  "1", patch.vcf_freq);
-      addCtrl<uint8_t>(26, 9, 0, 99, "VCF RES",   "1", patch.vcf_res);
-      addCtrl<uint8_t>(30, 0, 0, 99, "VCF ENV",   "1", patch.vcf_env);
-      addCtrl<uint8_t>(48, 0, 0, 99, "VCF LFO",   "1", patch.vcf_lfo);
-      addCtrl<uint8_t>(52, 0, 0, 99, "VCF KYBD",  "1", patch.vcf_kbd);
+      addCtrl<uint8_t>(MX::MID1, NONE, 3, enm_dco_range, "DCO RANGE   ", patch.btns1, 3, 0);
+      addCtrl<uint8_t>(MX::MID2, NONE, 0, 99, "DCO LFO     ", "1", patch.dco_lfo);
+      addCtrl<uint8_t>(MX::MID3, NONE, 0, 99, "DCO PWM     ", "1", patch.dco_pwm);
+      addCtrl<uint8_t>(MX::MID4, NONE, 2, enm_pwm_mode, "DCO PWM MODE", patch.btns2, 1, 0);
+      addCtrl<uint8_t>(MX::MID5, NONE, 2, enm_off_on, "DCO PWM WAVE", patch.btns1, 1, 3);
+      addCtrl<uint8_t>(MX::MID6, NONE, 2, enm_off_on, "DCO SAW WAVE", patch.btns1, 1, 4);
+      addCtrl<uint8_t>(MX::MID7, NONE, 0, 99, "DCO SUB     ", "1", patch.sub_osc_level);
+      addCtrl<uint8_t>(MX::MID8, NONE, 0, 99, "DCO NOISE   ", "1", patch.noise_level);
 
-      addCtrl<uint8_t>(62, 0, 0, 99, "VCA LEVEL", "1", patch.vca_level);
+      // HPF
+      static const ::Control::Enum enm_hpf_mode[4] =
+         {{SysEx::HPF_0, "0"}, {SysEx::HPF_1, "1",}, {SysEx::HPF_2, "2"}, {SysEx::HPF_3, "3",}};
 
-      addCtrl<uint8_t>(49, 0, 0, 99, "ENV A",     "1", patch.env_attack);
-      addCtrl<uint8_t>(53, 0, 0, 99, "ENV D",     "1", patch.env_decay);
-      addCtrl<uint8_t>(57, 0, 0, 99, "ENV S",     "1", patch.env_sustain);
-      addCtrl<uint8_t>(61, 0, 0, 99, "ENV R",     "1", patch.env_release);
+      addCtrl<uint8_t>(MX::BTM1, NONE, 4, enm_hpf_mode, "HPF MODE    ", patch.btns2, 2, 3);
 
-         // case 0b001: patch.range = edit("DCO RANGE 4'",  0b100); break;
-         // case 0b100: patch.range = edit("DCO RANGE 8'",  0b010); break;
-         // case 0b010: patch.range = edit("DCO RANGE 16'", 0b001); break;
+      // VCF
+      static const ::Control::Enum enm_vcf_env[2] =
+         {{1, "-ve"}, {0, "+ve"}};
 
-      static const char* range_enum[]   = {"RANGE 4'", "RANGE 8'", "RANGE 16'"};
-      static const char* chorus_enum[]  = {"CHORUS OFF", "CHORUS I", "CHORUS II"};
-      static const char* pwm_enum[]     = {"PWM OFF", "PWM ON"};
-      static const char* saw_enum[]     = {"SAW OFF", "SAW ON"};
-      static const char* dco_pwm_enum[] = {"PWM LFO", "PWM MAN"};
-      static const char* vca_enum[]     = {"VCA ENV", "VCA GATE"};
-      static const char* vcf_enum[]     = {"VCF +VE", "VCF -VE"};
+      addCtrl<uint8_t>(MX::BTM2, MK::K3, 0, 99, "VCF FREQ    ", "1", patch.vcf_freq);
+      addCtrl<uint8_t>(MX::BTM3, MK::K4, 0, 99, "VCF RES     ", "1", patch.vcf_res);
+      addCtrl<uint8_t>(MX::BTM4, NONE, 2, enm_vcf_env, "VCF ENV     ", patch.btns2, 1, 2);
+      addCtrl<uint8_t>(MX::BTM5, NONE,   0, 99, "VCF ENV     ", "1", patch.vcf_env);
+      addCtrl<uint8_t>(MX::BTM6, NONE,   0, 99, "VCF LFO     ", "1", patch.vcf_lfo);
+      addCtrl<uint8_t>(MX::BTM7, NONE,   0, 99, "VCF KYBD    ", "1", patch.vcf_kbd);
 
-      addBtn( 1, 1, 2, range_enum,   patch.btns1, 3, 0);
-      addTgl( 7,       pwm_enum,     patch.btns1, 3);
-      addTgl(10,       saw_enum,     patch.btns1, 4);
-      addBtn( 9, 9, 2, chorus_enum,  patch.btns1, 2, 5);
+      // VCA
+      static const ::Control::Enum enm_vca_mode[2] =
+         {{0, "ENV"}, {1, "GATE"}};
 
-      addTgl( 4,       dco_pwm_enum, patch.btns2, 0);
-      addTgl( 3,       vca_enum,     patch.btns2, 1);
-      addTgl( 6,       vcf_enum,     patch.btns2, 2);
+      addCtrl<uint8_t>(MX::TOP3, NONE, 2, enm_vca_mode, "VCA MODE    ", patch.btns2, 1, 1);
+      addCtrl<uint8_t>(MX::TOP4, NONE, 0, 99, "VCA LEVEL   ", "1", patch.vca_level);
 
-      addCtrl<uint8_t>(18, 0, 0,  3, "HPF",       "", patch.btns2, 2, 3);
+      // ENV
+      addCtrl<uint8_t>(MX::LVL5, MK::K5, 0, 99, "ENV ATTACK  ", "1", patch.env_attack);
+      addCtrl<uint8_t>(MX::LVL6, MK::K6, 0, 99, "ENV DECAY   ", "1", patch.env_decay);
+      addCtrl<uint8_t>(MX::LVL7, MK::K7, 0, 99, "ENV SUSTAIN ", "1", patch.env_sustain);
+      addCtrl<uint8_t>(MX::LVL8, MK::K8, 0, 99, "ENV RELEASE ", "1", patch.env_release);
+
+      // CHORUS
+      static const ::Control::Enum enm_chorus_mode[3] =
+         {{0b01, "OFF"}, {0b10, "I"}, {0b11, "II"}};
+
+      addCtrl<uint8_t>(MX::TOP5, NONE, 3, enm_chorus_mode, "CHORUS      ", patch.btns1, 2, 5);
+
+      // CONTROL
+      static const ::Control::Enum enm_porta_mode[2] =
+         {{PORTA_OFF, "OFF"}, {PORTA_ON, "ON"}};
+
+      addCtrl<float>(    MX::MASTER, NONE, -60.0f, +20.0f,     "VOLUME",       "dB", control.volume);
+      addCtrl<float>(    MX::LVL1,   NONE, 0.0f, +9.99f,       "BEND DCO   ",  "",   control.bend_vco);
+      addCtrl<float>(    MX::LVL2,   NONE, 0.0f, +9.99f,       "BEND VCF   ",  "",   control.bend_vcf);
+      addCtrl<float>(    MX::LVL3,   NONE, 0.0f, +9.99f,       "BEND LFO   ",  "",   control.bend_lfo);
+      addCtrl<PortaMode>(MX::TOP7,   NONE, 2, enm_porta_mode , "PORTA MODE ",        control.porta_mode);
+      addCtrl<float>(    MX::TOP8,   NONE, 0.0f, +9.99f,       "PORTMENTO  ",  "",   control.portamento);
    }
 
 private:
@@ -154,7 +182,8 @@ private:
       }
    }
 
-   SysEx patch{};
+   SysEx   patch{};
+   Control control{};
 };
 
 } // namespace Juno106

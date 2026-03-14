@@ -16,19 +16,24 @@ public:
 
    uint8_t lfo_rate;
    uint8_t lfo_delay;
+
    uint8_t dco_lfo;
    uint8_t dco_pwm;
    uint8_t noise_level;
+
    uint8_t vcf_freq;
    uint8_t vcf_res;
    uint8_t vcf_env;
    uint8_t vcf_lfo;
    uint8_t vcf_kbd;
+
    uint8_t vca_level;
+
    uint8_t env_attack;
    uint8_t env_decay;
    uint8_t env_sustain;
    uint8_t env_release;
+
    uint8_t sub_osc_level;
 
    enum Range { RANGE_4 = 0b100, RANGE_8 = 0b010, RANGE_16 = 0b001 };
