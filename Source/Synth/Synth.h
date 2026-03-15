@@ -173,26 +173,29 @@ protected:
    }
 
    //! Add a MIDI note button control
-   void addBtn(uint8_t     note_up_,
-               uint8_t     note_dn_,
-               uint8_t     max_,
-               const char* enum_table_[],
-               uint8_t&    patch_,
-               unsigned    width_ = 8,
-               unsigned    lsb_   = 0)
+   void addBtn(uint8_t              note_up_,
+               uint8_t              note_dn_,
+               unsigned             n_,
+               const Control::Enum* enum_,
+               const char*          name_,
+               uint8_t&             patch_,
+               unsigned             width_ = 8,
+               unsigned             lsb_   = 0)
    {
       NoteButton& btn = button[num_button++];
 
-      btn.init(note_up_, note_dn_, max_, enum_table_, patch_, width_, lsb_);
+      btn.init(note_up_, note_dn_, n_, enum_, name_, patch_, width_, lsb_);
    }
 
    //! Add a MIDI note toggle button control
-   void addTgl(uint8_t     note_,
-               const char* enum_table_[],
-               uint8_t&    patch_,
-               unsigned    bit_pos_ = 0)
+   void addTgl(uint8_t              note_,
+               const Control::Enum* enum_,
+               const char*          name_,
+               uint8_t&             patch_,
+               unsigned             width_ = 8,
+               unsigned             lsb_   = 0)
    {
-      addBtn(note_, note_, /* max */ 1, enum_table_, patch_, /* width */ 1, bit_pos_);
+      addBtn(note_, note_, 2, enum_, name, patch_, width_, lsb_);
    }
 
    //! Update text for the given line
