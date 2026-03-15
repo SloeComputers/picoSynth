@@ -6,14 +6,10 @@
 #pragma once
 
 #include "SynthVoice.h"
-#include "MidiController.h"
 
 #include "NoEffect.h"
 #include "Voice.h"
 #include "Patch.h"
-
-namespace MX = Akai::MIDImix;
-namespace MK = Akai::MPKmini;
 
 namespace Simple {
 

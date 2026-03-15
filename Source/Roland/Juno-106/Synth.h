@@ -8,16 +8,12 @@
 #include <cstring>
 
 #include "SynthVoiceSysEx.h"
-#include "MidiController.h"
 
 #include "Effect.h"
 #include "Patch.h"
 #include "Control.h"
 #include "Voice.h"
 #include "SysEx.h"
-
-namespace MX = Akai::MIDImix;
-namespace MK = Akai::MPKmini;
 
 namespace Juno106 {
 

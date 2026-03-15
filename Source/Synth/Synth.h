@@ -5,17 +5,22 @@
 
 #pragma once
 
-#include "STB/MIDIInstrument.h"
+#include "MIDI/Instrument.h"
+#include "MIDI/Map.h"
+#include "MIDI/Controller.h"
 
-#include "MidiController.h"
-#include "MidiMap.h"
 #include "Control.h"
 #include "NoteButton.h"
+
+namespace MX = Akai::MIDImix;
+namespace MK = Akai::MPKmini;
+
+inline constexpr unsigned NONE = MIDI::NONE;
 
 //! Synth external interface
 class Synth
    : public MIDI::Instrument
-   , public MidiMap::ControlMap
+   , public MIDI::Map::ControlMap
 {
 public:
    Synth(unsigned num_voices_)
@@ -28,7 +33,7 @@ public:
       setNumber(0);
 
       char title[17];
-      MidiMap::centerText(title, 16, name);
+      MIDI::Map::centerText(title, 16, name);
 
       setText(0, title);
       setText(1, "");
@@ -239,8 +244,8 @@ private:
       printf("\n--------------------------------------------------------------------------------\n");
       printf("%s\n\n", name);
 
-      MidiMap::print("Akai MIDImix", Akai::MIDImix::map, this, 1);
-      MidiMap::print("Akai MPKmini", Akai::MPKmini::map, this, 2);
+      MIDI::Map::print("Akai MIDImix", Akai::MIDImix::map, this, 1);
+      MIDI::Map::print("Akai MPKmini", Akai::MPKmini::map, this, 2);
    }
 
    static const unsigned MAX_TEXT_LEN   = 16;

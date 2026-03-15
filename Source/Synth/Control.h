@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "PatchRef.h"
+#include "STB/BitfieldRef.h"
 
 //! Link a MIDI control to a patch value with linear scaling
 class Control
@@ -160,7 +160,7 @@ public:
                unsigned width = (flags >> 3) & 0b111;
                unsigned lsb   = flags & 0b111;
 
-               PatchRef(*(uint8_t*)patch, width, lsb) = value;
+               STB::BitfieldRef<uint8_t>(*(uint8_t*)patch, width, lsb) = value;
             }
             break;
 

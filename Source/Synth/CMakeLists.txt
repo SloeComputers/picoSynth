@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(Synth STATIC
-            MidiController.cpp)
+add_library(Synth INTERFACE)
 
-target_include_directories(Synth PUBLIC .)
+target_include_directories(Synth INTERFACE .)
 
-target_link_libraries(Synth PUBLIC SIG)
+target_link_libraries(Synth INTERFACE MIDI SIG)

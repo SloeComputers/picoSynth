@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <cstdio>
 
-#include "PatchRef.h"
+#include "STB/BitfieldRef.h"
 
 //! Link a MIDI not to a patch value as an up/dn button control
 class NoteButton
@@ -58,11 +58,11 @@ public:
    }
 
 private:
-   uint8_t              note_up{};
-   uint8_t              note_dn{};
-   uint8_t              n{};
-   const char*          name{};
-   const Control::Enum* enum_table;
-   PatchRef             patch{};
+   uint8_t                   note_up{};
+   uint8_t                   note_dn{};
+   uint8_t                   n{};
+   const char*               name{};
+   const Control::Enum*      enum_table;
+   STB::BitfieldRef<uint8_t> patch{};
 };
 
