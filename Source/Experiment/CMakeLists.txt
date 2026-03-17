@@ -3,10 +3,11 @@
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
-add_library(Generic INTERFACE)
-
 add_subdirectory(Simple)
 add_subdirectory(PhysM)
+add_subdirectory(Additive)
 
-target_link_libraries(Generic INTERFACE
-                      Simple PhysM)
+add_library(Experiment INTERFACE)
+
+target_link_libraries(Experiment INTERFACE
+                      Simple PhysM Additive)
