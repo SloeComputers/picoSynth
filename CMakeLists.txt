@@ -9,7 +9,7 @@ project(picoSynth
         LANGUAGES CXX C ASM
         VERSION 0.1)
 
-set(HARDWARE picoX7)
+set(HWR_CONFIG picoX7)
 
-add_subdirectory(Platform/Hardware)
+add_subdirectory(Platform)
 add_subdirectory(Source)
