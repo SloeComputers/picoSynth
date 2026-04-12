@@ -7,4 +7,4 @@ add_library(Synth INTERFACE)
 
 target_include_directories(Synth INTERFACE .)
 
-target_link_libraries(Synth INTERFACE MIDI SIG_FP32)
+target_link_libraries(Synth INTERFACE MIDI SIG_FL32)

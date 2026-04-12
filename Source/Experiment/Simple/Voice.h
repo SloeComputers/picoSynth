@@ -72,15 +72,15 @@ public:
 private:
    SIG::Float       drive{};
    uint8_t          clip{};
-   SIG::Osc::Sine   osc{};
-   SIG::Env::Adsr   env{};
+   SIG::osc::Sine   osc{};
+   SIG::env::Adsr   env{};
    SIG::Gain        gain{};
 
-   SIG::Clip::No    no_clip{};
-   SIG::Clip::Hard  hard_clip{};
-   SIG::Clip::Poly  poly_clip{};
-   SIG::Clip::Poly5 poly5_clip{};
-   SIG::Clip::Tanh  tanh_clip{};
+   SIG::clip::No    no_clip{};
+   SIG::clip::Hard  hard_clip{};
+   SIG::clip::Poly  poly_clip{};
+   SIG::clip::Poly5 poly5_clip{};
+   SIG::clip::Tanh  tanh_clip{};
 };
 
 } // namespace Simple

@@ -55,8 +55,8 @@ private:
    enum Mode { TONE, NOISE };
 
    Mode             mode;
-   SIG::Osc::Square tone;
-   SIG::Osc::Noise  noise;
+   SIG::osc::Square tone;
+   SIG::osc::Noise  noise;
    SIG::Gain        gain{0.0};
 };
 

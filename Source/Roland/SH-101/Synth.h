@@ -16,7 +16,7 @@
 
 namespace SH_101 {
 
-class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip::Hard>
+class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::clip::Hard>
 {
 public:
    Synth()

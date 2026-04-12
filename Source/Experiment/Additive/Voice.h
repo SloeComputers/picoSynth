@@ -68,8 +68,8 @@ public:
    }
 
 private:
-   SIG::Osc::Sine sine[Patch::NUM_HARMONIC];
-   SIG::Env::Adsr env[Patch::NUM_HARMONIC];
+   SIG::osc::Sine sine[Patch::NUM_HARMONIC];
+   SIG::env::Adsr env[Patch::NUM_HARMONIC];
    SIG::Gain      volume{};
 };
 

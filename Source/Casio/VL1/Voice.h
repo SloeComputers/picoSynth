@@ -196,17 +196,17 @@ private:
 
    signed                        voice_transpose{0};
    Mode                          mode{};
-   SIG::Osc::PwmShift<1.0f,0.0f> octave_osc{};
-   SIG::Osc::Triangle            vibrato{};
+   SIG::osc::PwmShift<1.0f,0.0f> octave_osc{};
+   SIG::osc::Triangle            vibrato{};
    float                         melody_transpose{};
-   SIG::Osc::Pulse               melody{};
-   SIG::Filter::OnePole          lpf{SIG::Filter::LOPASS};
-   SIG::Env::Adsr                env{};
+   SIG::osc::Pulse               melody{};
+   SIG::filter::OnePole          lpf{SIG::filter::LOPASS};
+   SIG::env::Adsr                env{};
    bool                          tremolo_on{false};
-   SIG::Osc::Triangle            tremolo{};
-   SIG::Env::Adsr                perc_env{};
-   SIG::Osc::Pwm                 perc_osc{};
-   SIG::Osc::Noise               perc_noise{};
+   SIG::osc::Triangle            tremolo{};
+   SIG::env::Adsr                perc_env{};
+   SIG::osc::Pwm                 perc_osc{};
+   SIG::osc::Noise               perc_noise{};
    SIG::Gain                     volume{};
 };
 

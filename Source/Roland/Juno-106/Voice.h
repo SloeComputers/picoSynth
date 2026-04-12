@@ -133,16 +133,16 @@ private:
 
    signed                  transpose{0};
    uint8_t                 note{};
-   SIG::LfoEnv             lfo_env{};
+   SIG::env::LfoEnv        lfo_env{};
    SIG::Signal             dco_lfo{};
    SIG::Signal             dco_pwm_lfo_gain{};
    bool                    dco_pwm_lfo{};
-   SIG::Osc::Ramp          dco_saw{};
-   SIG::Osc::Pwm           dco_pwm{};
-   SIG::Osc::Pwm           dco_sub{};
-   SIG::Osc::Noise         noise{};
-   SIG::Env::Adsr          env{};
-   SIG::Filter::DualBiQuad vcf{SIG::Filter::LOPASS};
+   SIG::osc::Ramp          dco_saw{};
+   SIG::osc::Pwm           dco_pwm{};
+   SIG::osc::Pwm           dco_sub{};
+   SIG::osc::Noise         noise{};
+   SIG::env::Adsr          env{};
+   SIG::filter::DualBiQuad vcf{SIG::filter::LOPASS};
    SIG::Gain               vca{};
    bool                    vca_gate{};
    SIG::Signal             gate{};

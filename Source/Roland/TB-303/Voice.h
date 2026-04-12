@@ -104,13 +104,13 @@ private:
 
    SIG::Float accent{0.0};
 
-   SIG::Osc::Square     vco_square{};
-   SIG::Osc::Ramp       vco_ramp{};
-   SIG::Filter::BiQuad  hpf{SIG::Filter::HIPASS};
-   SIG::Filter::BiQuad  vcf1{SIG::Filter::LOPASS};
-   SIG::Filter::OnePole vcf2{SIG::Filter::LOPASS};
-   SIG::Env::Adsr       vcf_env{};
-   SIG::Env::Adsr       vca_env{};
+   SIG::osc::Square     vco_square{};
+   SIG::osc::Ramp       vco_ramp{};
+   SIG::filter::BiQuad  hpf{SIG::filter::HIPASS};
+   SIG::filter::BiQuad  vcf1{SIG::filter::LOPASS};
+   SIG::filter::OnePole vcf2{SIG::filter::LOPASS};
+   SIG::env::Adsr       vcf_env{};
+   SIG::env::Adsr       vca_env{};
    SIG::Gain            volume{};
 };
 

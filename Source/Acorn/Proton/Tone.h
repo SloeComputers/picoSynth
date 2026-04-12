@@ -10,7 +10,7 @@
 
 namespace SN76489 {
 
-class Tone : public SIG::Osc::Base
+class Tone : public SIG::osc::Base
 {
 public:
    Tone() = default;

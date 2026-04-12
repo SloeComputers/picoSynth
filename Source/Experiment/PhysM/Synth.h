@@ -13,7 +13,7 @@
 
 namespace PhysM {
 
-class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::Clip::Poly>
+class Synth : public ::SynthVoice<NoEffect, Voice, /* NUM_VOICES */ 1, SIG::clip::Poly>
 {
 public:
    Synth()

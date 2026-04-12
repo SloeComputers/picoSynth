@@ -195,14 +195,14 @@ private:
    SIG::Float   vcf_bend{};
 
    // Noise generator
-   SIG::Osc::Noise     noise{};
-   SIG::Filter::BiQuad noise_filter{SIG::Filter::LOPASS};
+   SIG::osc::Noise     noise{};
+   SIG::filter::BiQuad noise_filter{SIG::filter::LOPASS};
 
    // LFO
    LfoWave            lfo_wave{};
-   SIG::Osc::Triangle lfo_triangle{};
-   SIG::Osc::Square   lfo_square{};
-   SIG::Osc::Random   lfo_random{};
+   SIG::osc::Triangle lfo_triangle{};
+   SIG::osc::Square   lfo_square{};
+   SIG::osc::Random   lfo_random{};
 
    // VCO
    SIG::Float      vco_mod;
@@ -210,9 +210,9 @@ private:
    SIG::Float      pwm_level;
    signed          vco_octave{};
    SIG::Float      vco_sub_octave{};
-   SIG::Osc::Pwm   vco_rect{};
-   SIG::Osc::Ramp  vco_ramp{};
-   SIG::Osc::Pwm   vco_sub{};
+   SIG::osc::Pwm   vco_rect{};
+   SIG::osc::Ramp  vco_ramp{};
+   SIG::osc::Pwm   vco_sub{};
 
    // SOURCE
    SIG::Gain       noise_mix;
@@ -222,7 +222,7 @@ private:
    SIG::Signal         vcf_mod;
    SIG::Signal         vcf_env;
    SIG::Signal         vcf_kbd;
-   SIG::Filter::BiQuad vcf{SIG::Filter::LOPASS};
+   SIG::filter::BiQuad vcf{SIG::filter::LOPASS};
 
    // VCA
    VcaMode   vca_mode{};
@@ -230,7 +230,7 @@ private:
 
    // ENV
    EnvMode        env_mode{};
-   SIG::Env::Adsr env{};
+   SIG::env::Adsr env{};
 
    // AMP
    SIG::Gain volume{};

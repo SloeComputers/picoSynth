@@ -8,7 +8,7 @@
 #include "Synth.h"
 #include "SIG/SIG.h"
 
-template <typename EFFECT, typename VOICE, unsigned NUM_VOICES, typename CLIP = SIG::Clip::No>
+template <typename EFFECT, typename VOICE, unsigned NUM_VOICES, typename CLIP = SIG::clip::No>
 class SynthVoice : public Synth
 {
 public:

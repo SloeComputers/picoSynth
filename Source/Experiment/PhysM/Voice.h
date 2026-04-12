@@ -58,11 +58,11 @@ public:
    }
 
 private:
-   SIG::Osc::Noise      noise{};
-   SIG::Osc::Pwm        exciter{};
-   SIG::Filter::OnePole exciter_filter{SIG::Filter::LOPASS};
+   SIG::osc::Noise      noise{};
+   SIG::osc::Pwm        exciter{};
+   SIG::filter::OnePole exciter_filter{SIG::filter::LOPASS};
    SIG::DelayV<1000>    delay{};
-   SIG::Filter::OnePole delay_filter{SIG::Filter::LOPASS};
+   SIG::filter::OnePole delay_filter{SIG::filter::LOPASS};
    SIG::Gain            feedback{};
    SIG::Gain            volume{};
 };
