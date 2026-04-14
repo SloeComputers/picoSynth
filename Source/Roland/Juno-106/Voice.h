@@ -133,7 +133,7 @@ private:
 
    signed                  transpose{0};
    uint8_t                 note{};
-   SIG::env::LfoEnv        lfo_env{};
+   SIG::env::Lfo           lfo_env{};
    SIG::Signal             dco_lfo{};
    SIG::Signal             dco_pwm_lfo_gain{};
    bool                    dco_pwm_lfo{};
