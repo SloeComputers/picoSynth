@@ -1,5 +1,5 @@
-#------------------------------------------------------------------------------
-# Copyright (c) 2025 John D. Haughton
+#-------------------------------------------------------------------------------
+# Copyright (c) 2026 John D. Haughton
 # SPDX-License-Identifier: MIT
 #-------------------------------------------------------------------------------
 
@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(picoSynth
         LANGUAGES CXX C ASM
-        VERSION 0.1)
+        VERSION 0.0)
 
 set(HWR_CONFIG picoX7)
 
