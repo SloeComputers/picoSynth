@@ -4,6 +4,8 @@ Retro synth.
 
 ## Status
 
+[![Build Status](https://github.com/SloeComputers/picoSynth/actions/workflows/build_on_push.yml/badge.svg)](https://github.com/SloeComputers/picoSynth/actions/workflows/build_on_push.yml)
+
 Early development. Many unfinished things some of them barely started.
 
 ## Hardware
