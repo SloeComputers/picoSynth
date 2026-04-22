@@ -1,5 +1,5 @@
 theme: jekyll-theme-slate
 title: picoSynth
-description: A Sloe Computers Project
+description: A Sloe Computers project
 exclude:
    - PDK
