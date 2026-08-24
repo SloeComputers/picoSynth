@@ -42,7 +42,7 @@ public:
 
       dumpControls();
 
-      for(unsigned i = 0; i < num_voices; ++i)
+      for(unsigned i = 0; i < getNumVoices(); ++i)
       {
          voiceOff(i, 0);
       }
